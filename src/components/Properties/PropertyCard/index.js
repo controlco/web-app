@@ -8,7 +8,6 @@ import {
   CardMedia,
   Typography,
 } from "@material-ui/core";
-import Link from "../../Link";
 import useStyles from "./PropertyCard.styles";
 import { useRouter } from "next/router";
 
