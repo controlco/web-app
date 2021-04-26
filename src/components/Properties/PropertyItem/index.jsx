@@ -1,8 +1,9 @@
-import React from "react";
-import { Container, TextField, Grid, Button } from "@material-ui/core";
-import Image from "next/image";
+/* eslint-disable react/prop-types */
+import React from 'react';
+import { Container, TextField, Grid, Button } from '@material-ui/core';
+import Image from 'next/image';
 
-import { useFormik } from "formik";
+import { useFormik } from 'formik';
 
 const PropertyItem = (props) => {
   const {
@@ -15,14 +16,16 @@ const PropertyItem = (props) => {
   } = props;
   const formik = useFormik({
     initialValues: {
-      title: title,
-      description: description,
-      address: address,
-      phoneNumber: phoneNumber,
-      imageUrl: imageUrl,
-      dimension: dimension,
+      title,
+      description,
+      address,
+      phoneNumber,
+      imageUrl,
+      dimension,
     },
     onSubmit: (values) => {
+      // eslint-disable-next-line no-alert
+      // eslint-disable-next-line no-undef
       alert(JSON.stringify(values, null, 2));
     },
   });
@@ -96,7 +99,7 @@ const PropertyItem = (props) => {
               />
             </Grid>
             <Grid item xs={12}>
-              {/* TODO: Implementar el subir imagenes y enviar a la API*/}
+              {/* TODO: Implementar el subir imagenes y enviar a la API */}
               <TextField
                 variant="outlined"
                 margin="normal"
