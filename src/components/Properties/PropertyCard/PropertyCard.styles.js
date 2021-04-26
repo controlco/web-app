@@ -1,13 +1,15 @@
-import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+
+// eslint-disable-next-line no-unused-vars
 const useStyles = makeStyles((theme) =>
   createStyles({
     card: {
-      height: "100%",
-      display: "flex",
-      flexDirection: "column",
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
     },
     cardMedia: {
-      paddingTop: "56.25%", // 16:9
+      paddingTop: '56.25%', // 16:9
     },
     cardContent: {
       flexGrow: 1,

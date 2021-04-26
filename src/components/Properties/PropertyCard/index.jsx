@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 import {
   Button,
@@ -7,17 +7,19 @@ import {
   CardContent,
   CardMedia,
   Typography,
-} from "@material-ui/core";
-import useStyles from "./PropertyCard.styles";
-import { useRouter } from "next/router";
+} from '@material-ui/core';
+import { useRouter } from 'next/router';
+import useStyles from './PropertyCard.styles';
 
 const PropertyCard = (props) => {
+  // eslint-disable-next-line react/prop-types
   const { title, description, imageUrl, imageTitle, pid } = props;
   const classes = useStyles();
   const router = useRouter();
   const handleViewClick = () => {
     router.push(`/property/${pid}`);
   };
+
   return (
     <div>
       <Card className={classes.card}>
