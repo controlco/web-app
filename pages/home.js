@@ -1,7 +1,8 @@
 import React from "react";
+import Properties from "../src/components/Properties";
 
 const home = () => {
-  return <div>home mostrar todas las propiedades</div>;
+  return <Properties />;
 };
 
 export default home;
