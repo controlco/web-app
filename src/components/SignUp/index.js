@@ -15,6 +15,7 @@ import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 
 const SignUp = () => {
+  const [selectedDate, setDate] = React.useState(new Date());
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -22,7 +23,7 @@ const SignUp = () => {
       name: "",
       lastName: "",
       rut: "",
-      birthday: new Date(),
+      birthday: null,
     },
     //validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -30,6 +31,10 @@ const SignUp = () => {
     },
   });
 
+  const handleDateChange = (e) => {
+    setDate(e.target.value);
+    formik.setFieldValue("birthday", e.target.value, false);
+  };
   const classes = useStyles();
 
   return (
@@ -93,16 +98,15 @@ const SignUp = () => {
             <Grid item xs={12}>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DatePicker
+                  fullWidth
                   id="date-picker-dialog"
-                  label="Date picker dialog"
+                  label="Fecha de nacimiento (dd/mm/aaaa)"
                   inputVariant="outlined"
-                  format="MM/dd/yyyy"
+                  format="dd/MM/yyyy"
                   clearable
                   value={formik.values.birthday}
-                  onChange={formik.handleChange}
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
+                  disableFuture={true}
+                  onChange={(date) => formik.setFieldValue("birthday", date)}
                 />
               </MuiPickersUtilsProvider>
             </Grid>
