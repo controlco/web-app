@@ -1,19 +1,17 @@
 import React from "react";
-import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
-import Link from "next/link";
-import Box from "@material-ui/core/Box";
+import Head from "next/head";
+import Image from "next/image";
+import SignIn from "../src/components/SignIn/";
 
 const Index = () => {
   return (
-    <Container maxWidth="sm">
-      <Box my={4}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Next.js example
-        </Typography>
-        <Link href="/signin/">Iniciar sesión</Link>
-      </Box>
-    </Container>
+    <React.Fragment>
+      <Head>
+        <title>CtrlCo | Propiedades</title>
+      </Head>
+      {/*<Image src="/vercel.svg" alt="me" width="64" height="64" />*/}
+      <SignIn />
+    </React.Fragment>
   );
 };
 

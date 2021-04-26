@@ -3,6 +3,12 @@ const useStyles = makeStyles((theme) =>
   createStyles({
     root: {},
     "& #name": {},
+    paper: {
+      padding: theme.spacing(8, 4),
+    },
+    container: {
+      margin: theme.spacing(9, "auto", "auto", "auto"),
+    },
   })
 );
 
