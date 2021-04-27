@@ -13,7 +13,6 @@ const Profile = (props) => {
   const {
       imageUrl,
       email,
-      password,
       name,
       lastname,
       rut,
@@ -23,7 +22,6 @@ const Profile = (props) => {
     initialValues: {
       imageUrl,
       email,
-      password,
       name,
       lastname,
       rut,
@@ -68,18 +66,6 @@ const Profile = (props) => {
                 label="email"
                 name="email"
                 value={formik.values.email}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                label="Contraseña"
-                name="password"
-                value={formik.values.password}
                 onChange={formik.handleChange}
               />
             </Grid>
