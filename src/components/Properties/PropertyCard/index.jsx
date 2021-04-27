@@ -21,7 +21,7 @@ const PropertyCard = (props) => {
   };
 
   return (
-    <div>
+    <div onClick={handleViewClick}>
       <Card className={classes.card}>
         <CardMedia
           className={classes.cardMedia}
@@ -34,14 +34,6 @@ const PropertyCard = (props) => {
           </Typography>
           <Typography>{description}</Typography>
         </CardContent>
-        <CardActions>
-          <Button onClick={handleViewClick} size="small" color="primary">
-            Ver
-          </Button>
-          <Button size="small" color="primary">
-            Editar
-          </Button>
-        </CardActions>
       </Card>
     </div>
   );
