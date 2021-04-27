@@ -134,7 +134,13 @@ const NavBar = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Mi cuenta</MenuItem>
+      <MenuItem onClick={() => {
+          router.push('/profile');
+          handleMenuClose();
+        }}
+      >
+        Mi cuenta
+      </MenuItem>
       <MenuItem
         onClick={() => {
           router.push('/');
