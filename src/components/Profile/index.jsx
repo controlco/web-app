@@ -1,23 +1,14 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { Container, TextField, Grid, Button } from '@material-ui/core';
-import { DatePicker } from "@material-ui/pickers";
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 import Image from 'next/image';
-
 
 import { useFormik } from 'formik';
 
 const Profile = (props) => {
-  const {
-      imageUrl,
-      email,
-      name,
-      lastname,
-      rut,
-      birthday
-  } = props;
+  const { imageUrl, email, name, lastname, rut, birthday } = props;
   const formik = useFormik({
     initialValues: {
       imageUrl,
@@ -25,7 +16,7 @@ const Profile = (props) => {
       name,
       lastname,
       rut,
-      birthday
+      birthday,
     },
     onSubmit: (values) => {
       // eslint-disable-next-line no-alert
@@ -107,21 +98,21 @@ const Profile = (props) => {
               />
             </Grid>
             <Grid item xs={12}>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <DatePicker
-                    fullWidth
-                    id="date-picker-dialog"
-                    label="Fecha de nacimiento (dd/mm/aaaa)"
-                    inputVariant="outlined"
-                    format="dd/MM/yyyy"
-                    clearable
-                    value={formik.values.birthday}
-                    disableFuture={true}
-                    onChange={(date) => formik.setFieldValue("birthday", date)}
-                    />
-                </MuiPickersUtilsProvider>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <DatePicker
+                  fullWidth
+                  id="date-picker-dialog"
+                  label="Fecha de nacimiento (dd/mm/aaaa)"
+                  inputVariant="outlined"
+                  format="dd/MM/yyyy"
+                  clearable
+                  value={formik.values.birthday}
+                  disableFuture
+                  onChange={(date) => formik.setFieldValue('birthday', date)}
+                />
+              </MuiPickersUtilsProvider>
             </Grid>
-          
+
             <Button color="primary" variant="contained" fullWidth type="submit">
               Guardar
             </Button>
