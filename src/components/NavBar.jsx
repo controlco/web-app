@@ -134,7 +134,13 @@ const NavBar = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Mi cuenta</MenuItem>
+      <MenuItem onClick={() => {
+          router.push('/profile');
+          handleMenuClose();
+        }}
+      >
+        Mi cuenta
+      </MenuItem>
       <MenuItem
         onClick={() => {
           router.push('/');
@@ -220,17 +226,6 @@ const NavBar = () => {
           'Configuración calendario',
           'Configuración notificaciones',
         ].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>
               {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
