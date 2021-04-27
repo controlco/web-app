@@ -7,6 +7,7 @@ import { useFormik } from 'formik';
 
 const PropertyItem = (props) => {
   const {
+    action,
     title,
     description,
     address,
@@ -113,7 +114,7 @@ const PropertyItem = (props) => {
             </Grid>
 
             <Button color="primary" variant="contained" fullWidth type="submit">
-              Guardar
+              {action === 'CREATE' ? 'CREAR' : 'GUARDAR'}
             </Button>
           </Grid>
         </Grid>

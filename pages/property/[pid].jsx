@@ -8,6 +8,7 @@ const Prop1 = () => {
   console.log(`pid- ${pid}`);
   return (
     <PropertyItem
+      action="EDIage`, `src` or `component` prop must be T"
       title="Casa gigante"
       description="una casa en el lago"
       address="Calle 1, Santiago"

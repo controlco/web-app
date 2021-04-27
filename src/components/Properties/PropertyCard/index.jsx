@@ -1,27 +1,35 @@
 import React from 'react';
 
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Typography,
-} from '@material-ui/core';
+import { Card, CardContent, CardMedia, Typography } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import useStyles from './PropertyCard.styles';
 
 const PropertyCard = (props) => {
   // eslint-disable-next-line react/prop-types
-  const { title, description, imageUrl, imageTitle, pid } = props;
+  const { action, title, description, imageUrl, imageTitle, pid } = props;
   const classes = useStyles();
   const router = useRouter();
   const handleViewClick = () => {
-    router.push(`/property/${pid}`);
+    switch (action) {
+      case 'CREATE':
+        router.push('/property/create');
+        break;
+      case 'EDIT':
+        router.push(`/property/${pid}`);
+        break;
+      default:
+        router.push('404');
+    }
   };
 
   return (
-    <div onClick={handleViewClick}>
+    <div
+      className={classes.cardContainer}
+      onClick={() => {
+        handleViewClick();
+      }}
+      aria-hidden="true"
+    >
       <Card className={classes.card}>
         <CardMedia
           className={classes.cardMedia}
