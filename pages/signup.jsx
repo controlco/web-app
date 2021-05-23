@@ -1,6 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-import SignUpComponent from "../src/components/SignUp";
+import React from 'react';
+import PropTypes from 'prop-types';
+import SignUpComponent from '../src/components/SignUp';
 
 const signup = (props) => {
   return (

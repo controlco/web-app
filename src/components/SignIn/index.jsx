@@ -13,6 +13,8 @@ import { useFormik } from 'formik';
 // eslint-disable-next-line import/no-named-as-default-member
 // eslint-disable-next-line import/no-named-as-default
 import Link from '../Link';
+import { useRouter } from 'next/router';
+import { useAuth } from '../../../hooks/auth';
 
 function Copyright() {
   return (
@@ -47,6 +49,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignIn() {
+  const { login } = useAuth();
+  const router = useRouter();
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -54,10 +58,14 @@ export default function SignIn() {
       remember: false,
     },
     // validationSchema: validationSchema,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       // eslint-disable-next-line no-alert
       // eslint-disable-next-line no-undef
-      alert(JSON.stringify(values, null, 2));
+      const { email, password } = values;
+      await login(email, password)
+        .then((res) => router.push('/home'))
+        .catch((err) => console.log(err.response));
+      // alert(JSON.stringify(values, null, 2));
     },
   });
   const classes = useStyles();

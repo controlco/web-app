@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Grid } from '@material-ui/core';
 import PropertyCard from './PropertyCard';
 import useStyles from './Properties.styles';
+import { useAuth } from '../../../hooks/auth';
 
 const cards = [
   {
