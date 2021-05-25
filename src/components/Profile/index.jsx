@@ -7,8 +7,11 @@ import Image from 'next/image';
 
 import { useFormik } from 'formik';
 
+import useStyles from './Profile.styles';
+
 const Profile = (props) => {
   const { imageUrl, email, name, lastname, rut, birthday } = props;
+  const classes = useStyles();
   const formik = useFormik({
     initialValues: {
       imageUrl,
@@ -27,14 +30,18 @@ const Profile = (props) => {
   return (
     <Container maxWidth="md">
       <form onSubmit={formik.handleSubmit}>
-        <Grid container>
-          <Grid item container xs={16}>
-            <h1 text-align="center">Editar Perfil</h1>
+        <Grid container justify="space-between">
+          <Grid item container xs={12}>
+            <h1 className={classes.title}>Editar Perfil</h1>
           </Grid>
-          <Grid item container xs={6}>
-            <Image src={imageUrl} alt="me" width="auto" height="400px" />
-          </Grid>
-          <Grid item container xs={6}>
+          <Grid item container xs={5}>
+            <Image
+              className={classes.image}
+              src={imageUrl}
+              alt="me"
+              width="fullWidth"
+              height="auto"
+            />
             <Grid item xs={12}>
               {/* TODO: Implementar el subir imagenes y enviar a la API */}
               <TextField
@@ -48,6 +55,8 @@ const Profile = (props) => {
                 onChange={formik.handleChange}
               />
             </Grid>
+          </Grid>
+          <Grid item container xs={6}>
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -97,7 +106,7 @@ const Profile = (props) => {
                 onChange={formik.handleChange}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} className={classes.addMargin}>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DatePicker
                   fullWidth
@@ -112,8 +121,15 @@ const Profile = (props) => {
                 />
               </MuiPickersUtilsProvider>
             </Grid>
-
-            <Button color="primary" variant="contained" fullWidth type="submit">
+          </Grid>
+          <Grid item container xs={12}>
+            <Button
+              color="primary"
+              variant="contained"
+              fullWidth
+              type="submit"
+              className={classes.addMargin}
+            >
               Guardar
             </Button>
           </Grid>
