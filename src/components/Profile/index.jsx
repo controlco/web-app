@@ -34,16 +34,16 @@ const Profile = (props) => {
           <Grid item container xs={12}>
             <h1 className={classes.title}>Editar Perfil</h1>
           </Grid>
-          <Grid item container xs={5}>
-            <Image
-              className={classes.image}
-              src={imageUrl}
-              alt="me"
-              width="fullWidth"
-              height="auto"
-            />
+          <Grid item container xs={5} className={classes.addPadding}>
             <Grid item xs={12}>
-              {/* TODO: Implementar el subir imagenes y enviar a la API */}
+              <Image
+                src={imageUrl}
+                alt="me"
+                width="fullWidth"
+                height="fullHeight"
+              />
+            </Grid>
+            <Grid item xs={12}>
               <TextField
                 variant="outlined"
                 margin="normal"
@@ -55,6 +55,7 @@ const Profile = (props) => {
                 onChange={formik.handleChange}
               />
             </Grid>
+            {/* TODO: Implementar el subir imagenes y enviar a la API */}
           </Grid>
           <Grid item container xs={6}>
             <Grid item xs={12}>

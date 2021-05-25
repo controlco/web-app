@@ -8,13 +8,12 @@ const useStyles = makeStyles((theme) =>
       textAlign: 'center',
       margin: 'auto',
       marginTop: '60px',
-      marginBottom: '20px',
-    },
-    image: {
-      width: 'maxWitdh',
     },
     addMargin: {
       marginTop: '20px',
+    },
+    addPadding: {
+      paddingTop: '16px',
     },
   })
 );
