@@ -7,7 +7,6 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 // import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useFormik } from 'formik';
 // eslint-disable-next-line import/no-named-as-default-member
@@ -15,43 +14,19 @@ import { useFormik } from 'formik';
 import Paper from '@material-ui/core/Paper';
 import Link from '../Link';
 
+import useStyles from './SignIn.styles';
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+        Ctrl Co
       </Link>
       {new Date().getFullYear()}
     </Typography>
   );
 }
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: theme.spacing(8, 4),
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  title: {
-    color: '#3f51b5',
-    textAlign: 'center',
-    margin: 'auto',
-    marginTop: '60px',
-  },
-  container: {
-    margin: theme.spacing(9, 'auto', 'auto', 'auto'),
-  },
-}));
 
 export default function SignIn() {
   const formik = useFormik({
@@ -67,6 +42,8 @@ export default function SignIn() {
       alert(JSON.stringify(values, null, 2));
     },
   });
+
+
   const classes = useStyles();
 
   return (
