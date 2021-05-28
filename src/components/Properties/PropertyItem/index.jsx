@@ -44,7 +44,7 @@ const PropertyItem = (props) => {
           variant="h5"
           className={classes.title}
         >
-          Propiedad
+          {action === 'CREATE' ? 'Crear propiedad' : 'Editar propiedad'}
         </Typography>
         <form onSubmit={formik.handleSubmit}>
           <Grid container justify="space-between">
