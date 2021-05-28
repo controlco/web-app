@@ -5,13 +5,12 @@ const useStyles = makeStyles((theme) =>
     paper: {
       padding: theme.spacing(4),
     },
+    container: {
+      margin: theme.spacing(9, 'auto', 'auto', 'auto'),
+    },
     avatar: {
       margin: theme.spacing(1),
       backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-      width: '100%', // Fix IE 11 issue.
-      marginTop: theme.spacing(1),
     },
     submit: {
       margin: theme.spacing(3, 0, 2),
@@ -21,9 +20,6 @@ const useStyles = makeStyles((theme) =>
       textAlign: 'center',
       margin: 'auto',
       marginBottom: '20px',
-    },
-    container: {
-      margin: theme.spacing(9, 'auto', 'auto', 'auto'),
     },
   })
 );
