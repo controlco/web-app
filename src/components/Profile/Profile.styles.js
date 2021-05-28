@@ -1,8 +1,8 @@
-import { createStyles, makeStyles } from "@material-ui/core/styles";
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+
+// eslint-disable-next-line no-unused-vars
 const useStyles = makeStyles((theme) =>
   createStyles({
-    // root: {},
-    // container: {},
     paper: {
       padding: theme.spacing(4),
     },
@@ -26,4 +26,5 @@ const useStyles = makeStyles((theme) =>
     },
   })
 );
+
 export default useStyles;

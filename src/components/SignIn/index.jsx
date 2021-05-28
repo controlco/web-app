@@ -7,44 +7,26 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 // import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useFormik } from 'formik';
 // eslint-disable-next-line import/no-named-as-default-member
 // eslint-disable-next-line import/no-named-as-default
+import Paper from '@material-ui/core/Paper';
 import Link from '../Link';
+
+import useStyles from './SignIn.styles';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+        Ctrl Co
       </Link>
       {new Date().getFullYear()}
     </Typography>
   );
 }
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
 
 export default function SignIn() {
   const formik = useFormik({
@@ -60,65 +42,72 @@ export default function SignIn() {
       alert(JSON.stringify(values, null, 2));
     },
   });
+
+
   const classes = useStyles();
 
   return (
-    <Container component="main" maxWidth="xs">
-      <div className={classes.paper}>
-        <Typography component="h1" variant="h5">
+    <Container className={classes.container} maxWidth="sm">
+      <Paper className={classes.paper}>
+        <Typography
+          align="center"
+          component="h1"
+          variant="h5"
+          className={classes.title}
+        >
           Inicia sesión
         </Typography>
-        <form onSubmit={formik.handleSubmit} className={classes.form}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Correo electrónico"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            value={formik.values.email}
-            onChange={formik.handleChange}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Contraseña"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="remember"
-                value={formik.values.remember}
-                onChange={formik.handleChange}
-                color="primary"
-              />
-            }
-            label="Recordar usuario"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Ingresar
-          </Button>
-          <Grid container>
+        <form onSubmit={formik.handleSubmit}>
+          <Grid container justify="center" spacing={3}>
             <Grid item xs={12}>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <Link href="#" variant="body2">
+              <TextField
+                autoFocus
+                autoComplete="off"
+                fullWidth
+                id="email"
+                name="email"
+                label="Email"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                autoComplete="current-password"
+                fullWidth
+                id="password"
+                name="password"
+                label="Contraseña"
+                type="password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                variant="outlined"
+              />
+            </Grid>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="remember"
+                  value={formik.values.remember}
+                  onChange={formik.handleChange}
+                  color="primary"
+                />
+              }
+              label="Recordar usuario"
+            />
+            <Grid item xs={12}>
+              <Button
+                color="primary"
+                variant="contained"
+                fullWidth
+                type="submit"
+              >
+                Ingresar
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Link href="/" variant="body2">
                 Olvidaste la contraseña?
               </Link>
             </Grid>
@@ -129,7 +118,7 @@ export default function SignIn() {
             </Grid>
           </Grid>
         </form>
-      </div>
+      </Paper>
       <Box mt={8}>
         <Copyright />
       </Box>
