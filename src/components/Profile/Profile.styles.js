@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) =>
     },
     imageBorder: {
       borderRadius: '5px',
-    }
+    },
   })
 );
 
