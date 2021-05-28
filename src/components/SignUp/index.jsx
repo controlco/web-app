@@ -1,6 +1,5 @@
-import React from "react";
-import useStyles from "./SignUp.styles";
-import { useFormik } from "formik";
+import React from 'react';
+import { useFormik } from 'formik';
 import {
   Button,
   Container,
@@ -8,24 +7,25 @@ import {
   TextField,
   Paper,
   Typography,
-} from "@material-ui/core";
-import { DatePicker } from "@material-ui/pickers";
-import Link from "../Link";
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
+} from '@material-ui/core';
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import Link from '../Link';
+
+import useStyles from './SignUp.styles';
 
 const SignUp = () => {
   const [selectedDate, setDate] = React.useState(new Date());
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
-      name: "",
-      lastName: "",
-      rut: "",
+      email: '',
+      password: '',
+      name: '',
+      lastName: '',
+      rut: '',
       birthday: null,
     },
-    //validationSchema: validationSchema,
+    // validationSchema: validationSchema,
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
     },
@@ -33,14 +33,19 @@ const SignUp = () => {
 
   const handleDateChange = (e) => {
     setDate(e.target.value);
-    formik.setFieldValue("birthday", e.target.value, false);
+    formik.setFieldValue('birthday', e.target.value, false);
   };
   const classes = useStyles();
 
   return (
     <Container className={classes.container} maxWidth="sm">
       <Paper className={classes.paper}>
-        <Typography align="center" component="h1" variant="h5">
+        <Typography
+          align="center"
+          component="h1"
+          variant="h5"
+          className={classes.title}
+        >
           Registrate
         </Typography>
         <form onSubmit={formik.handleSubmit}>
@@ -105,8 +110,8 @@ const SignUp = () => {
                   format="dd/MM/yyyy"
                   clearable
                   value={formik.values.birthday}
-                  disableFuture={true}
-                  onChange={(date) => formik.setFieldValue("birthday", date)}
+                  disableFuture
+                  onChange={(date) => formik.setFieldValue('birthday', date)}
                 />
               </MuiPickersUtilsProvider>
             </Grid>

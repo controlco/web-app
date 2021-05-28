@@ -8,6 +8,12 @@ const useStyles = makeStyles((theme) =>
     container: {
       margin: theme.spacing(9, "auto", "auto", "auto"),
     },
+    title: {
+      color: '#3f51b5',
+      textAlign: 'center',
+      margin: 'auto',
+      marginTop: '60px',
+    },
   })
 );
 
