@@ -1,6 +1,9 @@
 import React from 'react';
 import { Container, Grid } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import PropertyCard from './PropertyCard';
+import NewPropertyCard from './NewPropertyCard';
+
 import useStyles from './Properties.styles';
 
 const cards = [
@@ -53,30 +56,18 @@ const Properties = () => {
   return (
     <Container className={classes.cardGrid} maxWidth="md">
       {/* End hero unit */}
+      <Typography
+        align="center"
+        component="h1"
+        variant="h4"
+        className={classes.title}
+      >
+        Mis propiedades
+      </Typography>
+      <NewPropertyCard />
       <Grid container spacing={4}>
-        <Grid item xs={12} sm={6} md={4} style={{ display: 'flex' }}>
-          <div
-            style={{
-              margin: 'auto',
-              borderRadius: '50px',
-              backgroundColor: 'blue',
-            }}
-          >
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/0/06/OOjs_UI_icon_add.svg"
-              alt="caca"
-              width="fullWidth"
-              height="fullHeight"
-            />
-          </div>
-        </Grid>
-        {/* <Grid item xs={12} sm={6} md={4}>
-          <PropertyCard
-            action="CREATE"
-            title="Crear"
-            description="Añadir propiedad"
-            imageUrl="https://upload.wikimedia.org/wikipedia/commons/0/06/OOjs_UI_icon_add.svg"
-          />
+        {/* <Grid item xs={12} sm={6} md={4} style={{ display: 'flex' }}>
+          <NewPropertyCard />
         </Grid> */}
         {cards.map((item) => (
           <Grid item key={item.pid} xs={12} sm={6} md={4}>
