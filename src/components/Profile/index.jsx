@@ -35,15 +35,23 @@ const Profile = (props) => {
             <h1 className={classes.title}>Editar Perfil</h1>
           </Grid>
           <Grid item container xs={5} className={classes.addPadding}>
-            <Grid item xs={12}>
-              <Image
-                src={imageUrl}
-                alt="me"
-                width="fullWidth"
-                height="fullHeight"
-              />
+            <Grid item xs={12} style={{ display: 'flex' }}>
+              <div
+                style={{
+                  margin: '0 auto',
+                  height: '318px',
+                  width: 'fullWidth',
+                }}
+              >
+                <Image
+                  src={imageUrl}
+                  alt="me"
+                  width="fullWidth"
+                  height="318px"
+                />
+              </div>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} className={classes.addMargin}>
               <TextField
                 variant="outlined"
                 margin="normal"
