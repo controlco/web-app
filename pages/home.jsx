@@ -4,8 +4,9 @@ import Layout from '../src/components/Layout';
 
 const home = () => (
   <>
-    <Layout />
-    <Properties />
+    <Layout>
+      <Properties />
+    </Layout>
   </>
 );
 

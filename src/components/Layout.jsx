@@ -1,15 +1,24 @@
 import React from 'react';
-import { ThemeProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import NavBar from './NavBar';
-import { useAuth, AuthProvider } from '../../hooks/auth';
-import theme from '../theme';
+import { useAuth } from '../../hooks/auth';
+import Loading from './Loading';
 
 // eslint-disable-next-line react/prop-types
-const Layout = () => {
-  const { isAuthenticated } = useAuth();
+const Layout = ({ children }) => {
+  const { isAuthenticated, loading, user } = useAuth();
+
   console.log(`auth in layout ${isAuthenticated}`);
-  return <>{isAuthenticated && <NavBar />}</>;
+  console.log(`isLoading in layout${loading}`);
+  console.log(`user in layout${JSON.stringify(user)}`);
+  if (isAuthenticated) {
+    return (
+      <>
+        <NavBar />
+        {children}
+      </>
+    );
+  }
+  return <Loading />;
 };
 
 export default Layout;

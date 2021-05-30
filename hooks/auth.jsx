@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 // eslint-disable-next-line camelcase
 import jwt_decode from 'jwt-decode';
+import { useRouter } from 'next/router';
 
 const API_BASE = 'http://localhost:8000';
 
@@ -9,7 +10,7 @@ const makeUrl = (endpoint) => API_BASE + endpoint;
 
 const fetchToken = (email, password) => {
   console.log('fetching token');
-  const url = makeUrl('/login/');
+  const url = makeUrl('/login');
   console.log(`url${url}`);
   return axios.post(url, { email, password });
 };
@@ -33,6 +34,7 @@ const AuthContext = React.createContext({
 
 // eslint-disable-next-line react/prop-types
 export const AuthProvider = ({ children }) => {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
@@ -71,6 +73,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    setLoading(true);
+    if (!isAuthenticated) {
+      router.push('/');
+    }
+    setLoading(false);
+  }, [isAuthenticated]);
+
+  useEffect(() => {
     initAuth();
   }, []);
 
@@ -78,7 +88,7 @@ export const AuthProvider = ({ children }) => {
     const resp = await fetchUser(id);
     console.log(JSON.stringify(resp));
     const { email } = await resp.data;
-    setUser(email);
+    setUser({ email, id });
   };
 
   const handleNewToken = (token) => {
