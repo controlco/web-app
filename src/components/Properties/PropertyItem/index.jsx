@@ -36,7 +36,7 @@ const PropertyItem = (props) => {
     },
   });
   return (
-    <Container className={classes.container} maxWidth="sm">
+    <Container className={classes.container} maxWidth="md">
       <Paper className={classes.paper}>
         <Typography
           align="center"
