@@ -23,7 +23,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+        {'CtrlCo Propiedades '}
       </Link>
       {new Date().getFullYear()}
     </Typography>
@@ -66,7 +66,7 @@ export default function SignIn() {
       // eslint-disable-next-line no-undef
       const { email, password } = values;
       await login(email, password)
-        .then((res) => router.push('/home'))
+        .then(() => router.push('/home'))
         .catch((err) => {
           console.log(err.response);
           setAlertOpen(true);

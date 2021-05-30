@@ -7,7 +7,7 @@ import APIClient from '../services/backend.services';
 
 const Index = () => {
   const { isAuthenticated } = useAuth();
-  APIClient.get('/users').then((res) => console.log(res));
+  // APIClient.get('/users').then((res) => console.log(res));
   console.log(`isauth in index ${isAuthenticated}`);
   return (
     <>

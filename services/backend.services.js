@@ -1,9 +1,10 @@
 import axios from 'axios';
 
 const APIClient = axios.create({
-  baseURL: 'https://jsonplaceholder.typicode.com/',
+  baseURL: 'http://localhost:8000',
   headers: {
     'Content-type': 'application/json',
+    //    'Access-Control-Allow-Origin': '*',
   },
 });
 
