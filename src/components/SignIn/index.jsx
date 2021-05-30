@@ -1,8 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 // import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -12,7 +10,13 @@ import { useFormik } from 'formik';
 // eslint-disable-next-line import/no-named-as-default-member
 // eslint-disable-next-line import/no-named-as-default
 import Paper from '@material-ui/core/Paper';
+import { useRouter } from 'next/router';
+import Alert from '@material-ui/lab/Alert';
+import IconButton from '@material-ui/core/IconButton';
+import Collapse from '@material-ui/core/Collapse';
+import CloseIcon from '@material-ui/icons/Close';
 import Link from '../Link';
+import { useAuth } from '../../../hooks/auth';
 
 import useStyles from './SignIn.styles';
 
@@ -21,7 +25,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
-        Ctrl Co
+        {'CtrlCo Propiedades '}
       </Link>
       {new Date().getFullYear()}
     </Typography>
@@ -29,6 +33,9 @@ function Copyright() {
 }
 
 export default function SignIn() {
+  const { login } = useAuth();
+  const router = useRouter();
+  const [alertOpen, setAlertOpen] = React.useState(false);
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -36,10 +43,17 @@ export default function SignIn() {
       remember: false,
     },
     // validationSchema: validationSchema,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       // eslint-disable-next-line no-alert
       // eslint-disable-next-line no-undef
-      alert(JSON.stringify(values, null, 2));
+      const { email, password } = values;
+      await login(email, password)
+        .then(() => router.push('/home'))
+        .catch((err) => {
+          console.log(err.response);
+          setAlertOpen(true);
+        });
+      // alert(JSON.stringify(values, null, 2));
     },
   });
 
@@ -57,17 +71,38 @@ export default function SignIn() {
         >
           Inicia sesión
         </Typography>
-        <form onSubmit={formik.handleSubmit}>
-          <Grid container justify="center" spacing={3}>
-            <Grid item xs={12}>
-              <TextField
-                autoFocus
-                autoComplete="off"
-                fullWidth
-                id="email"
-                name="email"
-                label="Email"
-                value={formik.values.email}
+        <form onSubmit={formik.handleSubmit} className={classes.form}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Correo electrónico"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            value={formik.values.email}
+            onChange={formik.handleChange}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Contraseña"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+          />
+          {/* <FormControlLabel
+            control={
+              <Checkbox
+                name="remember"
+                value={formik.values.remember}
                 onChange={formik.handleChange}
                 variant="outlined"
               />
@@ -84,28 +119,39 @@ export default function SignIn() {
                 onChange={formik.handleChange}
                 variant="outlined"
               />
-            </Grid>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="remember"
-                  value={formik.values.remember}
-                  onChange={formik.handleChange}
-                  color="primary"
-                />
+            }
+            label="Recordar usuario"
+          />
+          */}
+          <Collapse in={alertOpen}>
+            <Alert
+              severity="error"
+              action={
+                <IconButton
+                  aria-label="close"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    setAlertOpen(false);
+                  }}
+                >
+                  <CloseIcon fontSize="inherit" />
+                </IconButton>
               }
-              label="Recordar usuario"
-            />
-            <Grid item xs={12}>
-              <Button
-                color="primary"
-                variant="contained"
-                fullWidth
-                type="submit"
-              >
-                Ingresar
-              </Button>
-            </Grid>
+            >
+              Algo salió mal. Intenta nuevamente.
+            </Alert>
+          </Collapse>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Ingresar
+          </Button>
+          <Grid container>
             <Grid item xs={12}>
               <Link href="/" variant="body2">
                 Olvidaste la contraseña?

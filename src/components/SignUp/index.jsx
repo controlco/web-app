@@ -10,12 +10,21 @@ import {
 } from '@material-ui/core';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
+import Alert from '@material-ui/lab/Alert';
+import IconButton from '@material-ui/core/IconButton';
+import Collapse from '@material-ui/core/Collapse';
+import CloseIcon from '@material-ui/icons/Close';
+import { useRouter } from 'next/router';
 import Link from '../Link';
-
 import useStyles from './SignUp.styles';
+import APIClient from '../../../services/backend.services';
 
 const SignUp = () => {
-  const [selectedDate, setDate] = React.useState(new Date());
+  // const [selectedDate, setDate] = React.useState(new Date());
+  const [alertOpen, setAlertOpen] = React.useState(false);
+  const [alertSeverity, setAlertSeverity] = React.useState('error');
+  const [alertText, setAlertText] = React.useState('');
+  const router = useRouter();
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -23,18 +32,38 @@ const SignUp = () => {
       name: '',
       lastName: '',
       rut: '',
-      birthday: null,
+      birthdate: null,
     },
     // validationSchema: validationSchema,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: (values, { resetForm }) => {
+      console.log(`values \n ${JSON.stringify(values, null, 2)}`);
+      const payload = {
+        email: values.email,
+        password: values.password,
+        first_name: values.name,
+        last_name: values.lastName,
+      };
+      APIClient.post('/signup', payload)
+        .then((res) => {
+          console.log(res);
+          resetForm({});
+          setAlertSeverity('success');
+          setAlertText('Registrado exitosamente');
+          setAlertOpen(true);
+        })
+        .catch((err) => {
+          console.log(err.response);
+          setAlertText('Algo salió mal. Intenta nuevamente.');
+          setAlertSeverity('error');
+          setAlertOpen(true);
+        });
     },
   });
 
-  const handleDateChange = (e) => {
+  /* const handleDateChange = (e) => {
     setDate(e.target.value);
     formik.setFieldValue('birthday', e.target.value, false);
-  };
+  }; */
   const classes = useStyles();
 
   return (
@@ -93,7 +122,7 @@ const SignUp = () => {
                 autoComplete="off"
                 fullWidth
                 id="lastNames"
-                name="lastNames"
+                name="lastName"
                 label="Apellidos"
                 value={formik.values.lastName}
                 onChange={formik.handleChange}
@@ -127,6 +156,35 @@ const SignUp = () => {
                 variant="outlined"
               />
             </Grid>
+            <Collapse in={alertOpen}>
+              <Alert
+                severity={alertSeverity}
+                action={
+                  alertSeverity === 'success' ? (
+                    <Button
+                      color="inherit"
+                      size="small"
+                      onClick={() => router.push('/')}
+                    >
+                      Login
+                    </Button>
+                  ) : (
+                    <IconButton
+                      aria-label="close"
+                      color="inherit"
+                      size="small"
+                      onClick={() => {
+                        setAlertOpen(false);
+                      }}
+                    >
+                      <CloseIcon fontSize="inherit" />
+                    </IconButton>
+                  )
+                }
+              >
+                {alertText}
+              </Alert>
+            </Collapse>
             <Grid item xs={12}>
               <Button
                 color="primary"

@@ -25,6 +25,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 
+import { useAuth } from '../../hooks/auth';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -100,6 +102,8 @@ const useStyles = makeStyles((theme) => ({
 
 const NavBar = () => {
   const router = useRouter();
+
+  const { logout } = useAuth();
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -269,9 +273,9 @@ const NavBar = () => {
         </IconButton>
         <p>Profile</p>
       </MenuItem>
-      <MenuItem onClick={() => router.push('/')}>
+      <MenuItem onClick={() => logout()}>
         <IconButton
-          onClick={() => router.push('/')}
+          onClick={() => logout()}
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
           aria-haspopup="true"
@@ -347,11 +351,7 @@ const NavBar = () => {
             >
               <AccountCircle />
             </IconButton>
-            <IconButton
-              edge="end"
-              onClick={() => router.push('/')}
-              color="inherit"
-            >
+            <IconButton edge="end" onClick={() => logout()} color="inherit">
               <ExitToAppIcon />
             </IconButton>
           </div>

@@ -4,11 +4,10 @@ import React from 'react';
 import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import NavBar from '../src/components/NavBar';
 import theme from '../src/theme';
+import { AuthProvider } from '../hooks/auth';
 
 const MyApp = ({ Component, pageProps }) => {
-  const user = true;
   React.useEffect(() => {
     // Remove the server-side injected CSS.
     // eslint-disable-next-line no-undef
@@ -30,8 +29,9 @@ const MyApp = ({ Component, pageProps }) => {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        {user && <NavBar />}
-        <Component {...pageProps} />
+        <AuthProvider>
+          <Component {...pageProps} />
+        </AuthProvider>
       </ThemeProvider>
     </>
   );

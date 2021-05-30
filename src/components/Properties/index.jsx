@@ -5,7 +5,8 @@ import PropertyCard from './PropertyCard';
 import NewPropertyCard from './NewPropertyCard';
 
 import useStyles from './Properties.styles';
-
+import { useAuth } from '../../../hooks/auth';
+import APIClient from '../../../services/backend.services';
 const cards = [
   {
     pid: 1,
@@ -53,6 +54,17 @@ const cards = [
 
 const Properties = () => {
   const classes = useStyles();
+  const { user } = useAuth();
+  console.log(`user ${JSON.stringify(user)}`);
+
+  const [data, setData] = React.useState(null);
+
+  React.useEffect(() => {
+    APIClient.get(`/users/${user.id}/properties/`).then((res) => {
+      console.log(`res properties ${JSON.stringify(res)}`);
+      setData(res.data);
+    });
+  }, []);
   return (
     <Container className={classes.cardGrid} maxWidth="md">
       {/* End hero unit */}
@@ -66,22 +78,31 @@ const Properties = () => {
       </Typography>
       <NewPropertyCard />
       <Grid container spacing={4}>
-        {/* <Grid item xs={12} sm={6} md={4} style={{ display: 'flex' }}>
-          <NewPropertyCard />
-        </Grid> */}
-        {cards.map((item) => (
-          <Grid item key={item.pid} xs={12} sm={6} md={4}>
-            <PropertyCard
-              action="EDIT"
-              key={item.pid}
-              title={item.title}
-              description={item.description}
-              imageUrl={item.imageUrl}
-              imageTitle={item.imageTitle}
-              pid={item.pid}
-            />
-          </Grid>
-        ))}
+        <Grid item xs={12} sm={6} md={4}>
+          <PropertyCard
+            action="CREATE"
+            title="Crear"
+            description="Añadir propiedad"
+            imageUrl="https://upload.wikimedia.org/wikipedia/commons/0/06/OOjs_UI_icon_add.svg"
+          />
+        </Grid>
+        {data &&
+          data.map((item) => (
+            <Grid item key={item.pid} xs={12} sm={6} md={4}>
+              <PropertyCard
+                action="EDIT"
+                key={item.id}
+                title={item.title}
+                description={item.description}
+                imageUrl={
+                  //item.property_images
+                  // ? JSON.stringify(item.property_images[0].cover)
+                  'https://ecowellness.com/wp-content/uploads/2017/04/property.jpg'
+                }
+                pid={item.id}
+              />
+            </Grid>
+          ))}
       </Grid>
     </Container>
   );
