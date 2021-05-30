@@ -1,8 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 // import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -12,8 +10,12 @@ import Container from '@material-ui/core/Container';
 import { useFormik } from 'formik';
 // eslint-disable-next-line import/no-named-as-default-member
 // eslint-disable-next-line import/no-named-as-default
-import Link from '../Link';
 import { useRouter } from 'next/router';
+import Alert from '@material-ui/lab/Alert';
+import IconButton from '@material-ui/core/IconButton';
+import Collapse from '@material-ui/core/Collapse';
+import CloseIcon from '@material-ui/icons/Close';
+import Link from '../Link';
 import { useAuth } from '../../../hooks/auth';
 
 function Copyright() {
@@ -51,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
   const { login } = useAuth();
   const router = useRouter();
+  const [alertOpen, setAlertOpen] = React.useState(false);
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -64,7 +67,10 @@ export default function SignIn() {
       const { email, password } = values;
       await login(email, password)
         .then((res) => router.push('/home'))
-        .catch((err) => console.log(err.response));
+        .catch((err) => {
+          console.log(err.response);
+          setAlertOpen(true);
+        });
       // alert(JSON.stringify(values, null, 2));
     },
   });
@@ -103,7 +109,7 @@ export default function SignIn() {
             value={formik.values.password}
             onChange={formik.handleChange}
           />
-          <FormControlLabel
+          {/* <FormControlLabel
             control={
               <Checkbox
                 name="remember"
@@ -114,6 +120,26 @@ export default function SignIn() {
             }
             label="Recordar usuario"
           />
+          */}
+          <Collapse in={alertOpen}>
+            <Alert
+              severity="error"
+              action={
+                <IconButton
+                  aria-label="close"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    setAlertOpen(false);
+                  }}
+                >
+                  <CloseIcon fontSize="inherit" />
+                </IconButton>
+              }
+            >
+              Algo salió mal. Intenta nuevamente.
+            </Alert>
+          </Collapse>
           <Button
             type="submit"
             fullWidth
