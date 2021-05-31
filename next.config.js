@@ -8,6 +8,6 @@ module.exports = {
     ],
   },
   env: {
-    baseURL: 'http://desarrollosoftware.tk',
+    baseURL: 'https://desarrollosoftware.tk',
   },
 };
