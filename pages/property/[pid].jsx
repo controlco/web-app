@@ -12,7 +12,7 @@ export default function Prop({ data }) {
   const router = useRouter();
   const { pid } = router.query;
   // console.log(`pid- ${pid} \nuserToken -${user.token}`);
-  // console.log(`data - ${JSON.stringify(data)}`)// ;
+  console.log(`data - ${JSON.stringify(data, null, 2)}`); // ;
   const {
     title,
     adress,
@@ -23,6 +23,7 @@ export default function Prop({ data }) {
     district_name,
     electricity_service,
     water_service,
+    property_images,
   } = data;
   return (
     <Layout>
@@ -38,7 +39,14 @@ export default function Prop({ data }) {
         electricityService={electricity_service}
         waterService={water_service}
         pid={pid}
-        imageUrl="https://source.unsplash.com/random"
+        imageUrl={
+          property_images.slice(-1)[0]
+            ? `http://desarrollosoftware.tk/${property_images
+                .slice(-1)[0]
+                .cover.replace('http://localhost:8000/', '')}`
+            : // ? JSON.stringify(item.property_images[0].cover)
+              'https://ecowellness.com/wp-content/uploads/2017/04/property.jpg'
+        }
       />
     </Layout>
   );

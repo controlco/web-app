@@ -46,9 +46,7 @@ const PropertyItem = (props) => {
   const [alertSeverity, setAlertSeverity] = React.useState('error');
   const [alertText, setAlertText] = React.useState('');
   const [fileToUpload, setFileToUpload] = React.useState('');
-  const [imgSrc, setImgSrc] = React.useState(
-    'https://ecowellness.com/wp-content/uploads/2017/04/property.jpg'
-  );
+  const [imgSrc, setImgSrc] = React.useState(imageUrl);
   const { user } = useAuth();
   const classes = useStyles();
   const router = useRouter();
@@ -161,7 +159,12 @@ const PropertyItem = (props) => {
         .then((res) => {
           // console.log('success uploaded');
           setProgress(-1);
-          setImgSrc(res.data.cover);
+          console.log(`success uploaded${res.data.cover}`);
+          setImgSrc(
+            `http://desarrollosoftware.tk/${res.data.cover
+              .slice(-1)[0]
+              .cover.replace('http://localhost:8000/', '')}`
+          );
         })
         .catch((err) => {
           // console.log(err);
@@ -181,7 +184,6 @@ const PropertyItem = (props) => {
       },
     })
       .then((res) => {
-        // console.log('success uploaded');
         setProgress(-1);
         setImgSrc(res.data.cover);
       })
@@ -190,6 +192,8 @@ const PropertyItem = (props) => {
         setProgress(-1);
       });
   };
+
+  React.useEffect(() => {}, [imgSrc]);
 
   return (
     <Container className={classes.container} maxWidth="md">
