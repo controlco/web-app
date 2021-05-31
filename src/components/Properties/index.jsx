@@ -7,50 +7,6 @@ import NewPropertyCard from './NewPropertyCard';
 import useStyles from './Properties.styles';
 import { useAuth } from '../../../hooks/auth';
 import APIClient from '../../../services/backend.services';
-const cards = [
-  {
-    pid: 1,
-    title: 'property',
-    description: 'A property',
-    imageUrl: 'https://source.unsplash.com/random',
-    imageTitle: 'imgTitle',
-  },
-  {
-    pid: 2,
-    title: 'property2',
-    description: 'A property',
-    imageUrl: 'https://source.unsplash.com/random',
-    imageTitle: 'imgTitle',
-  },
-  {
-    pid: 3,
-    title: 'property3',
-    description: 'A property',
-    imageUrl: 'https://source.unsplash.com/random',
-    imageTitle: 'imgTitle',
-  },
-  {
-    pid: 4,
-    title: 'property4',
-    description: 'A property',
-    imageUrl: 'https://source.unsplash.com/random',
-    imageTitle: 'imgTitle',
-  },
-  {
-    pid: 5,
-    title: 'property5',
-    description: 'A property',
-    imageUrl: 'https://source.unsplash.com/random',
-    imageTitle: 'imgTitle',
-  },
-  {
-    pid: 6,
-    title: 'property6',
-    description: 'A property',
-    imageUrl: 'https://source.unsplash.com/random',
-    imageTitle: 'imgTitle',
-  },
-];
 
 const Properties = () => {
   const classes = useStyles();

@@ -9,16 +9,16 @@ import Paper from '@material-ui/core/Paper';
 import { useFormik } from 'formik';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import useStyles from './PropertyItem.styles';
-import APIClient from '../../../../services/backend.services';
-import { useAuth } from '../../../../hooks/auth';
 
 import Alert from '@material-ui/lab/Alert';
 import IconButton from '@material-ui/core/IconButton';
 import Collapse from '@material-ui/core/Collapse';
 import CloseIcon from '@material-ui/icons/Close';
 
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
+import useStyles from './PropertyItem.styles';
+import { useAuth } from '../../../../hooks/auth';
+import APIClient from '../../../../services/backend.services';
 
 const PropertyItem = (props) => {
   const {
@@ -35,7 +35,7 @@ const PropertyItem = (props) => {
     imageUrl,
     pid,
   } = props;
-  const router = useRouter();
+  // const router = useRouter();
   const [alertOpen, setAlertOpen] = React.useState(false);
   const [alertSeverity, setAlertSeverity] = React.useState('error');
   const [alertText, setAlertText] = React.useState('');

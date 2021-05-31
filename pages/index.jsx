@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useAuth } from '../hooks/auth';
 // eslint-disable-next-line no-unused-vars
 import SignIn from '../src/components/SignIn';
-import APIClient from '../services/backend.services';
+// import APIClient from '../services/backend.services';
 
 const Index = () => {
   const { isAuthenticated } = useAuth();
