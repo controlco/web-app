@@ -41,7 +41,7 @@ export default function Prop({ data }) {
         pid={pid}
         imageUrl={
           property_images.slice(-1)[0]
-            ? `http://desarrollosoftware.tk/${property_images
+            ? `${process.env.baseURL}/${property_images
                 .slice(-1)[0]
                 .cover.replace('http://localhost:8000/', '')}`
             : // ? JSON.stringify(item.property_images[0].cover)

@@ -44,7 +44,7 @@ const Properties = () => {
                 description={item.description}
                 imageUrl={
                   item.property_images.slice(-1)[0]
-                    ? `http://desarrollosoftware.tk${
+                    ? `${process.env.baseURL}${
                         item.property_images.slice(-1)[0].cover
                       }`
                     : // ? JSON.stringify(item.property_images[0].cover)

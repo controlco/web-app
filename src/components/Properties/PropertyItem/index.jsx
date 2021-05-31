@@ -163,7 +163,7 @@ const PropertyItem = (props) => {
           setProgress(-1);
           console.log(`success uploaded${res.data.cover}`);
           setImgSrc(
-            `http://desarrollosoftware.tk/${res.data.cover
+            `${process.env.baseURL}/${res.data.cover
               .slice(-1)[0]
               .cover.replace('http://localhost:8000/', '')}`
           );

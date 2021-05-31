@@ -7,4 +7,7 @@ module.exports = {
       'desarrollosoftware.tk',
     ],
   },
+  env: {
+    baseURL: 'http://desarrollosoftware.tk',
+  },
 };
