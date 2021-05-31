@@ -23,3 +23,9 @@ Correr la aplicación para esto se puede utilizar el modo **dev** o **prod**.
 
 > Para **prod**, correr en la terminal:
 > `npm run build && npm start`
+
+Por defecto, la aplicación se conectará a un endpoint que se encuentra de manera remota en una instancia de AWS, para conectarse a el endpoint local, es decir, `http://localhost:8000`, es necesario actualizar la variable de entorno presente en el archivo `next.config.js`.
+
+> Se debe reemplazar `http://desarrollosoftware.tk` por `http://desarrollosoftware.tk`.
+
+**NOTA: Se recomienda fuertemente utilizar la versión por defecto, por comodidad**.
