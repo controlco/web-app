@@ -78,14 +78,6 @@ const Properties = () => {
       </Typography>
       <NewPropertyCard />
       <Grid container spacing={4}>
-        <Grid item xs={12} sm={6} md={4}>
-          <PropertyCard
-            action="CREATE"
-            title="Crear"
-            description="Añadir propiedad"
-            imageUrl="https://upload.wikimedia.org/wikipedia/commons/0/06/OOjs_UI_icon_add.svg"
-          />
-        </Grid>
         {data &&
           data.map((item) => (
             <Grid item key={item.pid} xs={12} sm={6} md={4}>
@@ -95,7 +87,7 @@ const Properties = () => {
                 title={item.title}
                 description={item.description}
                 imageUrl={
-                  //item.property_images
+                  // item.property_images
                   // ? JSON.stringify(item.property_images[0].cover)
                   'https://ecowellness.com/wp-content/uploads/2017/04/property.jpg'
                 }

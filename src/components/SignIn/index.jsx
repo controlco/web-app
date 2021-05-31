@@ -151,11 +151,12 @@ export default function SignIn() {
             Ingresar
           </Button>
           <Grid container>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <Link href="/" variant="body2">
                 Olvidaste la contraseña?
               </Link>
             </Grid>
+            */}
             <Grid item xs={12}>
               <Link href="/signup/" variant="body2">
                 Registrarse

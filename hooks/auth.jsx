@@ -84,11 +84,11 @@ export const AuthProvider = ({ children }) => {
     initAuth();
   }, []);
 
-  const initUser = async (id) => {
+  const initUser = async (id, token) => {
     const resp = await fetchUser(id);
     console.log(JSON.stringify(resp));
     const { email } = await resp.data;
-    setUser({ email, id });
+    setUser({ email, id, token });
   };
 
   const handleNewToken = (token) => {
@@ -110,7 +110,7 @@ export const AuthProvider = ({ children }) => {
       const decodedToken = jwt_decode(resp.data.token);
       console.log('sucessss');
       handleNewToken(decodedToken);
-      await initUser(decodedToken.user_id);
+      await initUser(decodedToken.user_id, resp.data.token);
     } else {
       setIsAuthenticated(false);
       setLoading(true);

@@ -7,7 +7,18 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 
 import { useFormik } from 'formik';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import useStyles from './PropertyItem.styles';
+import APIClient from '../../../../services/backend.services';
+import { useAuth } from '../../../../hooks/auth';
+
+import Alert from '@material-ui/lab/Alert';
+import IconButton from '@material-ui/core/IconButton';
+import Collapse from '@material-ui/core/Collapse';
+import CloseIcon from '@material-ui/icons/Close';
+
+import { useRouter } from 'next/router';
 
 const PropertyItem = (props) => {
   const {
@@ -15,24 +26,89 @@ const PropertyItem = (props) => {
     title,
     description,
     address,
-    phoneNumber,
+    price,
+    latitude,
+    longitude,
+    districtName,
+    electricityService,
+    waterService,
     imageUrl,
-    dimension,
+    pid,
   } = props;
+  const router = useRouter();
+  const [alertOpen, setAlertOpen] = React.useState(false);
+  const [alertSeverity, setAlertSeverity] = React.useState('error');
+  const [alertText, setAlertText] = React.useState('');
+  const { user } = useAuth();
   const classes = useStyles();
   const formik = useFormik({
     initialValues: {
       title,
       description,
       address,
-      phoneNumber,
+      price,
+      latitude,
+      longitude,
+      districtName,
+      electricityService,
+      waterService,
       imageUrl,
-      dimension,
     },
-    onSubmit: (values) => {
+    onSubmit: async (values, { resetForm }) => {
       // eslint-disable-next-line no-alert
       // eslint-disable-next-line no-undef
-      alert(JSON.stringify(values, null, 2));
+      const payload = {
+        title: values.title,
+        description: values.description,
+        adress: values.address,
+        price: values.price,
+        latitude: values.latitude,
+        longitude: values.longitude,
+        district_name: values.districtName,
+        district: 2,
+        electricity_service:
+          values.electricityService === true ? 'True' : 'False',
+        water_service: values.waterService === true ? 'True' : 'False',
+      };
+      switch (action) {
+        case 'CREATE':
+          await APIClient.post(`/properties/`, payload, {
+            headers: { Authorization: `Bearer ${user.token}` },
+          })
+            .then((res) => {
+              resetForm({});
+              setAlertText('Propiedad creada con éxito.');
+              setAlertSeverity('success');
+              setAlertOpen(true);
+              console.log(res);
+            })
+            .catch((err) => {
+              setAlertSeverity('error');
+              setAlertText('Ocurrió un error. Intenta nuevamente.');
+              setAlertOpen(true);
+              console.log(err);
+            });
+          break;
+        case 'EDIT':
+          await APIClient.patch(`/properties/${pid}/`, payload, {
+            headers: { Authorization: `Bearer ${user.token}` },
+          })
+            .then((res) => {
+              setAlertText('Actualizado con éxito.');
+              setAlertSeverity('success');
+              setAlertOpen(true);
+              console.log(res);
+            })
+            .catch((err) => {
+              setAlertSeverity('error');
+              setAlertText('Ocurrió un error. Intenta nuevamente.');
+              setAlertOpen(true);
+              console.log(err);
+            });
+          break;
+        default:
+          return null;
+      }
     },
   });
   return (
@@ -46,6 +122,25 @@ const PropertyItem = (props) => {
         >
           {action === 'CREATE' ? 'Crear propiedad' : 'Editar propiedad'}
         </Typography>
+        <Collapse in={alertOpen}>
+          <Alert
+            severity={alertSeverity}
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setAlertOpen(false);
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            {alertText}
+          </Alert>
+        </Collapse>
         <form onSubmit={formik.handleSubmit}>
           <Grid container justify="space-between">
             <Grid item container xs={5} className={classes.addPadding}>
@@ -72,7 +167,7 @@ const PropertyItem = (props) => {
                   margin="normal"
                   required
                   fullWidth
-                  label="URL de magen"
+                  label="URL de imagen"
                   name="imageUrl"
                   value={formik.values.imageUrl}
                   onChange={formik.handleChange}
@@ -87,7 +182,7 @@ const PropertyItem = (props) => {
                   margin="normal"
                   required
                   fullWidth
-                  label="titulo"
+                  label="Título"
                   name="title"
                   value={formik.values.title}
                   onChange={formik.handleChange}
@@ -123,9 +218,9 @@ const PropertyItem = (props) => {
                   margin="normal"
                   required
                   fullWidth
-                  label="Número de teléfono"
-                  name="phoneNumber"
-                  value={formik.values.phoneNumber}
+                  label="Latitud"
+                  name="latitude"
+                  value={formik.values.latitude}
                   onChange={formik.handleChange}
                 />
               </Grid>
@@ -135,10 +230,58 @@ const PropertyItem = (props) => {
                   margin="normal"
                   required
                   fullWidth
-                  label="Dimensión"
-                  name="dimensión"
-                  value={formik.values.dimension}
+                  label="Longitud"
+                  name="longitude"
+                  value={formik.values.longitude}
                   onChange={formik.handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  label="Comuna"
+                  name="districtName"
+                  value={formik.values.districtName}
+                  onChange={formik.handleChange}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <FormControlLabel
+                  value="top"
+                  control={
+                    <Checkbox
+                      color="primary"
+                      margin="normal"
+                      fullWidth
+                      name="waterService"
+                      checked={formik.values.waterService}
+                      value={formik.values.waterService}
+                      onChange={formik.handleChange}
+                    />
+                  }
+                  label="Agua"
+                  labelPlacement="start"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <FormControlLabel
+                  value="top"
+                  control={
+                    <Checkbox
+                      color="primary"
+                      margin="normal"
+                      fullWidth
+                      name="electricityService"
+                      checked={formik.values.electricityService}
+                      value={formik.values.electricityService}
+                      onChange={formik.handleChange}
+                    />
+                  }
+                  label="Electricidad"
+                  labelPlacement="start"
                 />
               </Grid>
             </Grid>
