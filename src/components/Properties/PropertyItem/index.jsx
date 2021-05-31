@@ -129,10 +129,12 @@ const PropertyItem = (props) => {
           await APIClient.patch(`/properties/${pid}/`, payload, {
             headers: { Authorization: `Bearer ${user.token}` },
           })
-            .then((res) => {
+            .then(async (res) => {
               setAlertText('Actualizado con éxito.');
               setAlertSeverity('success');
               setAlertOpen(true);
+              await sleep(3000);
+              router.push('/home');
               //  console.log(res);
             })
             .catch((err) => {
