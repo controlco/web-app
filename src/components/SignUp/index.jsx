@@ -21,10 +21,15 @@ import APIClient from '../../../services/backend.services';
 
 const SignUp = () => {
   // const [selectedDate, setDate] = React.useState(new Date());
+  // TODO: add validations
   const [alertOpen, setAlertOpen] = React.useState(false);
   const [alertSeverity, setAlertSeverity] = React.useState('error');
   const [alertText, setAlertText] = React.useState('');
   const router = useRouter();
+  const maxDate = new Date();
+  const currentDate = new Date();
+  maxDate.setFullYear(currentDate.getFullYear() - 18);
+  // console.log(`date ${maxDate.toLocaleDateString()}`);
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -36,23 +41,26 @@ const SignUp = () => {
     },
     // validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
-      console.log(`values \n ${JSON.stringify(values, null, 2)}`);
+      // console.log(`values \n ${JSON.stringify(values, null, 2)}`);
+
       const payload = {
         email: values.email,
         password: values.password,
         first_name: values.name,
         last_name: values.lastName,
+        birth_date: values.birthdate,
+        rut: values.rut,
       };
       APIClient.post('/signup', payload)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           resetForm({});
           setAlertSeverity('success');
           setAlertText('Registrado exitosamente');
           setAlertOpen(true);
         })
         .catch((err) => {
-          console.log(err.response);
+          // console.log(err.response);
           setAlertText('Algo salió mal. Intenta nuevamente.');
           setAlertSeverity('error');
           setAlertOpen(true);
@@ -138,9 +146,10 @@ const SignUp = () => {
                   inputVariant="outlined"
                   format="dd/MM/yyyy"
                   clearable
-                  value={formik.values.birthday}
+                  value={formik.values.birthdate}
                   disableFuture
-                  onChange={(date) => formik.setFieldValue('birthday', date)}
+                  maxDate={maxDate}
+                  onChange={(date) => formik.setFieldValue('birthdate', date)}
                 />
               </MuiPickersUtilsProvider>
             </Grid>
