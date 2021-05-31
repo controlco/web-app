@@ -39,7 +39,7 @@ const Properties = () => {
             <Grid item key={item.pid} xs={12} sm={6} md={4}>
               <PropertyCard
                 action="EDIT"
-                key={item.id}
+                key={item.pid}
                 title={item.title}
                 description={item.description}
                 imageUrl={

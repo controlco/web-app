@@ -81,7 +81,7 @@ const Profile = (props) => {
                   margin="normal"
                   required
                   fullWidth
-                  label="email"
+                  label="Email"
                   name="email"
                   value={formik.values.email}
                   onChange={formik.handleChange}
