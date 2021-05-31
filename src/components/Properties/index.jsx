@@ -17,7 +17,7 @@ const Properties = () => {
 
   React.useEffect(() => {
     APIClient.get(`/users/${user.id}/properties/`).then((res) => {
-      console.log(`res properties ${JSON.stringify(res)}`);
+      // console.log(`res properties ${JSON.stringify(res, null, 2)}`);
       setData(res.data);
     });
   }, []);
@@ -43,9 +43,12 @@ const Properties = () => {
                 title={item.title}
                 description={item.description}
                 imageUrl={
-                  // item.property_images
-                  // ? JSON.stringify(item.property_images[0].cover)
-                  'https://ecowellness.com/wp-content/uploads/2017/04/property.jpg'
+                  item.property_images.slice(-1)[0]
+                    ? `http://desarrollosoftware.tk${
+                        item.property_images.slice(-1)[0].cover
+                      }`
+                    : // ? JSON.stringify(item.property_images[0].cover)
+                      'https://ecowellness.com/wp-content/uploads/2017/04/property.jpg'
                 }
                 pid={item.id}
               />

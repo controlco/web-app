@@ -14,11 +14,16 @@ import Alert from '@material-ui/lab/Alert';
 import IconButton from '@material-ui/core/IconButton';
 import Collapse from '@material-ui/core/Collapse';
 import CloseIcon from '@material-ui/icons/Close';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgressWithLabel from '../../CircularProgressWithLabel';
 
-// import { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import useStyles from './PropertyItem.styles';
 import { useAuth } from '../../../../hooks/auth';
 import APIClient from '../../../../services/backend.services';
+
+const sleep = (time) => new Promise((acc) => setTimeout(acc, time));
 
 const PropertyItem = (props) => {
   const {
@@ -36,11 +41,40 @@ const PropertyItem = (props) => {
     pid,
   } = props;
   // const router = useRouter();
+
   const [alertOpen, setAlertOpen] = React.useState(false);
   const [alertSeverity, setAlertSeverity] = React.useState('error');
   const [alertText, setAlertText] = React.useState('');
+  const [fileToUpload, setFileToUpload] = React.useState('');
+  const [imgSrc, setImgSrc] = React.useState(
+    'https://ecowellness.com/wp-content/uploads/2017/04/property.jpg'
+  );
   const { user } = useAuth();
   const classes = useStyles();
+  const router = useRouter();
+  const [progress, setProgress] = React.useState(-1);
+
+  const [imgData, setImgData] = React.useState(null);
+  const handleFileChange = (event) => {
+    // eslint-disable-next-line no-undef
+    const file = event.currentTarget.files[0];
+    // eslint-disable-next-line no-undef
+    const data = new FormData();
+    data.append('cover', file);
+    data.append('title', 'imggg');
+    data.append('property', pid);
+    data.append('file', file);
+    // console.log(`file in handleFileChange ${file.name}`);
+    // console.log(`data in handleFileChange ${data}`);
+    setFileToUpload(file);
+    setImgData(data);
+    /* APIClient.post('/images/', data, {
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+    }).then(() => console.log('success uploaded'));} */
+  };
+
   const formik = useFormik({
     initialValues: {
       title,
@@ -53,10 +87,12 @@ const PropertyItem = (props) => {
       electricityService,
       waterService,
       imageUrl,
+      file: null,
     },
     onSubmit: async (values, { resetForm }) => {
       // eslint-disable-next-line no-alert
       // eslint-disable-next-line no-undef
+      // alert(JSON.stringify(values), null, 2);
       const payload = {
         title: values.title,
         description: values.description,
@@ -75,18 +111,20 @@ const PropertyItem = (props) => {
           await APIClient.post(`/properties/`, payload, {
             headers: { Authorization: `Bearer ${user.token}` },
           })
-            .then((res) => {
+            .then(async (res) => {
               resetForm({});
               setAlertText('Propiedad creada con éxito.');
               setAlertSeverity('success');
               setAlertOpen(true);
-              console.log(res);
+              await sleep(3000);
+              router.push('/home');
+              // console.log(res);
             })
             .catch((err) => {
               setAlertSeverity('error');
               setAlertText('Ocurrió un error. Intenta nuevamente.');
               setAlertOpen(true);
-              console.log(err);
+              //console.log(err);
             });
           break;
         case 'EDIT':
@@ -97,20 +135,62 @@ const PropertyItem = (props) => {
               setAlertText('Actualizado con éxito.');
               setAlertSeverity('success');
               setAlertOpen(true);
-              console.log(res);
+              //  console.log(res);
             })
             .catch((err) => {
               setAlertSeverity('error');
               setAlertText('Ocurrió un error. Intenta nuevamente.');
               setAlertOpen(true);
-              console.log(err);
+              // console.log(err);
             });
           break;
         default:
           return null;
       }
+      setProgress(0);
+
+      await APIClient.post('/images/', imgData, {
+        headers: {
+          'content-type': 'multipart/form-data',
+        },
+
+        onUploadProgress: (p) => {
+          setProgress(Math.round((p.loaded * 100) / p.total));
+        },
+      })
+        .then((res) => {
+          // console.log('success uploaded');
+          setProgress(-1);
+          setImgSrc(res.data.cover);
+        })
+        .catch((err) => {
+          // console.log(err);
+          setProgress(-1);
+        });
     },
   });
+  const handleUpload = async () => {
+    setProgress(0);
+    await APIClient.post('/images/', imgData, {
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+
+      onUploadProgress: (p) => {
+        setProgress(Math.round((p.loaded * 100) / p.total));
+      },
+    })
+      .then((res) => {
+        // console.log('success uploaded');
+        setProgress(-1);
+        setImgSrc(res.data.cover);
+      })
+      .catch((err) => {
+        // console.log(err);
+        setProgress(-1);
+      });
+  };
+
   return (
     <Container className={classes.container} maxWidth="md">
       <Paper className={classes.paper}>
@@ -153,7 +233,7 @@ const PropertyItem = (props) => {
                   }}
                 >
                   <Image
-                    src={imageUrl}
+                    src={imgSrc}
                     alt="me"
                     width="fullWidth"
                     height="318px"
@@ -161,18 +241,54 @@ const PropertyItem = (props) => {
                   />
                 </div>
               </Grid>
-              <Grid item xs={12} className={classes.addMargin}>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  label="URL de imagen"
-                  name="imageUrl"
-                  value={formik.values.imageUrl}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
+              {action === 'EDIT' && (
+                <Grid item xs={12} className={classes.addMargin}>
+                  <div className={classes.uploaderContainer}>
+                    <input
+                      accept="image/*"
+                      id="contained-button-file"
+                      multiple
+                      style={{ display: 'none' }}
+                      type="file"
+                      onChange={(event) => {
+                        handleFileChange(event);
+                      }}
+                    />
+
+                    <label htmlFor="contained-button-file">
+                      <Button
+                        className="btn-choose"
+                        variant="outlined"
+                        component="span"
+                        style={{ textTransform: 'none' }}
+                      >
+                        Seleccionar imagen
+                      </Button>
+                    </label>
+                    <div>{fileToUpload.name}</div>
+                  </div>
+                </Grid>
+              )}
+              {/* <div style={{ position: 'relative' }}>
+                  <Button
+                    variant="contained"
+                    color="default"
+                    fullWidth
+                    onClick={() => handleUpload()}
+                    disabled={progress > -1}
+                    startIcon={
+                      progress > -1 ? (
+                        <CircularProgressWithLabel value={progress} size={24} />
+                      ) : (
+                        <CloudUploadIcon />
+                      )
+                    }
+                  >
+                    Subir
+                  </Button>
+                </div>
+                  * /}
+              
               {/* TODO: Implementar el subir imagenes y enviar a la API */}
             </Grid>
             <Grid item container xs={6}>
@@ -255,7 +371,6 @@ const PropertyItem = (props) => {
                     <Checkbox
                       color="primary"
                       margin="normal"
-                      fullWidth
                       name="waterService"
                       checked={formik.values.waterService}
                       value={formik.values.waterService}
@@ -273,7 +388,6 @@ const PropertyItem = (props) => {
                     <Checkbox
                       color="primary"
                       margin="normal"
-                      fullWidth
                       name="electricityService"
                       checked={formik.values.electricityService}
                       value={formik.values.electricityService}
@@ -292,6 +406,17 @@ const PropertyItem = (props) => {
                 fullWidth
                 type="submit"
                 className={classes.addMargin}
+                disabled={progress > -1}
+                startIcon={
+                  // eslint-disable-next-line no-nested-ternary
+                  action === 'EDIT' ? (
+                    progress > -1 ? (
+                      <CircularProgressWithLabel value={progress} size={24} />
+                    ) : (
+                      <CloudUploadIcon />
+                    )
+                  ) : null
+                }
               >
                 {action === 'CREATE' ? 'CREAR' : 'GUARDAR'}
               </Button>

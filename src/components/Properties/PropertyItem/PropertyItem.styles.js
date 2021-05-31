@@ -25,6 +25,16 @@ const useStyles = makeStyles((theme) =>
     imageBorder: {
       borderRadius: '5px',
     },
+    input: {
+      display: 'none',
+    },
+    uploaderContainer: {
+      display: 'flex',
+      justifyContent: 'space-between',
+    },
+    centerLabel: {
+      margin: '0 auto',
+    },
   })
 );
 export default useStyles;

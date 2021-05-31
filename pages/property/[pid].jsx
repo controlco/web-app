@@ -11,8 +11,8 @@ export default function Prop({ data }) {
   const { user } = useAuth();
   const router = useRouter();
   const { pid } = router.query;
-  console.log(`pid- ${pid} \nuserToken -${user.token}`);
-  console.log(`data - ${JSON.stringify(data)}`);
+  // console.log(`pid- ${pid} \nuserToken -${user.token}`);
+  // console.log(`data - ${JSON.stringify(data)}`)// ;
   const {
     title,
     adress,
