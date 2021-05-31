@@ -8,7 +8,7 @@ import SignIn from '../src/components/SignIn';
 const Index = () => {
   const { isAuthenticated } = useAuth();
   // APIClient.get('/users').then((res) => console.log(res));
-  console.log(`isauth in index ${isAuthenticated}`);
+  // console.log(`isauth in index ${isAuthenticated}`);
   return (
     <>
       <Head>

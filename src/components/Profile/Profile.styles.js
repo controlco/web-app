@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) =>
     },
     addMargin: {
       marginTop: '20px',
+      display: 'flex',
     },
     addPadding: {
       paddingTop: '16px',

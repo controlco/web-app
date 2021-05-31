@@ -1,27 +1,21 @@
 import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
 // eslint-disable-next-line camelcase
 import jwt_decode from 'jwt-decode';
 import { useRouter } from 'next/router';
-
-const API_BASE = 'http://localhost:8000';
-
-const makeUrl = (endpoint) => API_BASE + endpoint;
+import APIClient from '../services/backend.services';
 
 const fetchToken = (email, password) => {
-  console.log('fetching token');
-  const url = makeUrl('/login');
-  console.log(`url${url}`);
-  return axios.post(url, { email, password });
+  // console.log('fetching token');
+  return APIClient.post('/login', { email, password });
 };
 
 const fetchUser = async (id) => {
-  console.log('fetching user');
-  const url = makeUrl(`/users/${id}/`);
+  // console.log('fetching user');
+  const url = `/users/${id}/`;
   const headers = {
     'Content-Type': 'application/json',
   };
-  return axios.get(url, { headers });
+  return APIClient.get(url, { headers });
 };
 
 const AuthContext = React.createContext({
@@ -52,7 +46,7 @@ export const AuthProvider = ({ children }) => {
       return false;
     }
     const expiry = new Date(accessTokenExpiry);
-    console.log('Checking token expiry:', expiry);
+    // console.log('Checking token expiry:', expiry);
     return expiry.getTime() > Date.now();
   };
 
@@ -86,9 +80,19 @@ export const AuthProvider = ({ children }) => {
 
   const initUser = async (id, token) => {
     const resp = await fetchUser(id);
-    console.log(JSON.stringify(resp));
-    const { email } = await resp.data;
-    setUser({ email, id, token });
+    // console.log(JSON.stringify(resp));
+    // eslint-disable-next-line camelcase
+    const { email, first_name, last_name, rut, birth_date } = await resp.data;
+    setUser({
+      email,
+      id,
+      token,
+      first_name,
+      last_name,
+      rut,
+      birth_date,
+    });
+    // console.log(`useeer - ${JSON.stringify(user, null, 2)}`);
   };
 
   const handleNewToken = (token) => {
@@ -101,14 +105,15 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const resp = await fetchToken(email, password);
-    console.log(`responseee ${JSON.stringify(resp, null, 4)}`);
-    console.log(
+    // console.log(`responseee ${JSON.stringify(resp, null, 4)}`);
+    /* console.log(
       `token ${JSON.stringify(jwt_decode(resp.data.token), null, 4)}`
     );
+    */
 
     if (resp.data.success) {
       const decodedToken = jwt_decode(resp.data.token);
-      console.log('sucessss');
+      // console.log('sucessss');
       handleNewToken(decodedToken);
       await initUser(decodedToken.user_id, resp.data.token);
     } else {

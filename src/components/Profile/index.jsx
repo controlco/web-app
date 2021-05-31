@@ -7,12 +7,28 @@ import Image from 'next/image';
 
 import { useFormik } from 'formik';
 
+import Alert from '@material-ui/lab/Alert';
+import IconButton from '@material-ui/core/IconButton';
+import Collapse from '@material-ui/core/Collapse';
+import CloseIcon from '@material-ui/icons/Close';
+
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import useStyles from './Profile.styles';
 
+import APIClient from '../../../services/backend.services';
+
 const Profile = (props) => {
-  const { imageUrl, email, name, lastname, rut, birthday } = props;
+  // console.log(`props in profile ${JSON.stringify(props)}`);
+  const maxDate = new Date();
+  const currentDate = new Date();
+  maxDate.setFullYear(currentDate.getFullYear() - 18);
+
+  const [alertOpen, setAlertOpen] = React.useState(false);
+  const [alertSeverity, setAlertSeverity] = React.useState('error');
+  const [alertText, setAlertText] = React.useState('');
+
+  const { imageUrl, email, name, lastname, rut, birthdate, id, token } = props;
   const classes = useStyles();
   const formik = useFormik({
     initialValues: {
@@ -21,16 +37,45 @@ const Profile = (props) => {
       name,
       lastname,
       rut,
-      birthday,
+      birthdate,
+      // eslint-disable-next-line no-undef
+      // file: null,
     },
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       // eslint-disable-next-line no-alert
       // eslint-disable-next-line no-undef
-      alert(JSON.stringify(values, null, 2));
+      const payload = {
+        email: values.email,
+        first_name: values.name,
+        last_name: values.lastName,
+        birth_date: values.birthdate,
+        rut: values.rut,
+      };
+      await APIClient.patch(`/users/${id}/`, payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then(() => {
+          // console.log('actualizado con exito');
+
+          setAlertText('Perfil actualizado con éxito.');
+          setAlertSeverity('success');
+          setAlertOpen(true);
+        })
+
+        .catch((err) => {
+          setAlertSeverity('error');
+          setAlertText('Ocurrió un error. Intenta nuevamente.');
+          setAlertOpen(true);
+          // console.log(err);
+        });
+
+      // alert(JSON.stringify(values.file, null, 2));
     },
   });
+
+  React.useEffect(() => {}, [formik.values.birthdate]);
   return (
-    <Container className={classes.container} maxWidth="md">
+    <Container className={classes.container} maxWidth="sm">
       <Paper className={classes.paper}>
         <Typography
           align="center"
@@ -40,9 +85,35 @@ const Profile = (props) => {
         >
           Editar Perfil
         </Typography>
+        <Collapse in={alertOpen}>
+          <Alert
+            severity={alertSeverity}
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setAlertOpen(false);
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            {alertText}
+          </Alert>
+        </Collapse>
         <form onSubmit={formik.handleSubmit}>
           <Grid container justify="space-between">
-            <Grid item container xs={5} className={classes.addPadding}>
+            {/* 
+            <Grid
+              item
+              container
+              xs={5}
+              justify="center"
+              className={classes.addPadding}
+            >
               <Grid item xs={12} style={{ display: 'flex' }}>
                 <div
                   style={{
@@ -60,21 +131,56 @@ const Profile = (props) => {
                   />
                 </div>
               </Grid>
+
               <Grid item xs={12} className={classes.addMargin}>
-                <TextField
+                <div className={classes.centerLabel}>
+                  <input
+                    accept="image/*"
+                    id="contained-button-file"
+                    multiple
+                    className={classes.input}
+                    type="file"
+                    onChange={(event) => {
+                      formik.setFieldValue(
+                        'file',
+                        event.currentTarget.files[0]
+                      );
+                      console.log(
+                        'eveeeeent upload',
+                        event.currentTarget.files[0]
+                      );
+                      console.log(
+                        'eveeeeent upload2',
+                        event.currentTarget.files
+                      );
+                    }}
+                  />
+                  <label htmlFor="contained-button-file">
+                    <Button
+                      variant="contained"
+                      style={{ margin: 'auto 0' }}
+                      color="primary"
+                      component="span"
+                    >
+                      Cargar imagen
+                    </Button>
+                  </label>
+                </div>
+              </Grid>
+              <TextField
                   variant="outlined"
                   margin="normal"
                   required
                   fullWidth
-                  label="URL de magen"
+                  label="URL de imagen"
                   name="imageUrl"
                   value={formik.values.imageUrl}
                   onChange={formik.handleChange}
+
                 />
-              </Grid>
-              {/* TODO: Implementar el subir imagenes y enviar a la API */}
             </Grid>
-            <Grid item container xs={6}>
+            */}
+            <Grid item container xs={12}>
               <Grid item xs={12}>
                 <TextField
                   variant="outlined"
@@ -133,9 +239,10 @@ const Profile = (props) => {
                     inputVariant="outlined"
                     format="dd/MM/yyyy"
                     clearable
-                    value={formik.values.birthday}
+                    value={formik.values.birthdate}
                     disableFuture
-                    onChange={(date) => formik.setFieldValue('birthday', date)}
+                    maxDate={maxDate}
+                    onChange={(date) => formik.setFieldValue('birthdate', date)}
                   />
                 </MuiPickersUtilsProvider>
               </Grid>
