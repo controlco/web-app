@@ -6,7 +6,7 @@ const create = () => (
   <Layout>
     <PropertyItem
       action="CREATE"
-      imageUrl="https://source.unsplash.com/random"
+      imageUrl="https://ecowellness.com/wp-content/uploads/2017/04/property.jpg"
     />
   </Layout>
 );
