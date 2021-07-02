@@ -323,7 +323,9 @@ const NavBar = () => {
               <HomeIcon />
             </IconButton>
             <IconButton
-              onClick={(event) => handleClick(event)}
+              onClick={() => {
+                router.push('/messages');
+              }}
               aria-describedby={id}
               aria-label="show 4 new mails"
               color="inherit"
