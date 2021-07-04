@@ -1,6 +1,16 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { Container, TextField, Grid, Button } from '@material-ui/core';
+import {
+  Container,
+  TextField,
+  Grid,
+  Button,
+  Checkbox,
+  FormControl,
+  FormGroup,
+  FormControlLabel,
+  FormLabel,
+} from '@material-ui/core';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import Image from 'next/image';
@@ -38,6 +48,8 @@ const Profile = (props) => {
       lastname,
       rut,
       birthdate,
+      emailNotifications: false,
+      pushNotifications: false,
       // eslint-disable-next-line no-undef
       // file: null,
     },
@@ -50,6 +62,8 @@ const Profile = (props) => {
         last_name: values.lastName,
         birth_date: values.birthdate,
         rut: values.rut,
+        emailNotifications: values.emailNotifications,
+        pushNotifications: values.pushNotifications,
       };
       await APIClient.patch(`/users/${id}/`, payload, {
         headers: { Authorization: `Bearer ${token}` },
@@ -245,6 +259,44 @@ const Profile = (props) => {
                     onChange={(date) => formik.setFieldValue('birthdate', date)}
                   />
                 </MuiPickersUtilsProvider>
+              </Grid>
+
+              <Grid item xs={12} className={classes.addMargin}>
+                <FormControl component="fieldset" className={classes.addMargin}>
+                  <FormLabel component="legend">Notificaciones</FormLabel>
+                  <FormGroup>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={formik.values.emailNotifications}
+                          onChange={(event) =>
+                            formik.setFieldValue(
+                              'emailNotifications',
+                              event.target.checked
+                            )
+                          }
+                          inputProps={{ 'aria-label': 'primary checkbox' }}
+                        />
+                      }
+                      label="Email notifications"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={formik.values.pushNotifications}
+                          onChange={(event) =>
+                            formik.setFieldValue(
+                              'pushNotifications',
+                              event.target.checked
+                            )
+                          }
+                          inputProps={{ 'aria-label': 'primary checkbox' }}
+                        />
+                      }
+                      label="Push notifications"
+                    />
+                  </FormGroup>
+                </FormControl>
               </Grid>
             </Grid>
             <Grid item xs={12}>
