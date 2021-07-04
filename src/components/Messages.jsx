@@ -15,6 +15,7 @@ import SendIcon from '@material-ui/icons/Send';
 
 import APIClient from '../../services/backend.services';
 import { useAuth } from '../../hooks/auth';
+import { SentimentSatisfiedOutlined } from '@material-ui/icons';
 
 const useStyles = makeStyles({
   table: {
@@ -52,15 +53,29 @@ const Chat = () => {
   // todos los mensajes que le han llegado al usuario actual
   const [allMessages, setAllMessages] = React.useState('');
   // id del usuario especifico que estamos viendo
-  const [actualUserChat, setActualUserChat] = React.useState(24);
-  // // subject actual
-  // const [actualSubject, setActualSubject] = React.useState(24);
+  const [actualUserChat, setActualUserChat] = React.useState('');
+  // principal info de personas que mandan
+  const [sendersMainData, setSendersMainData] = React.useState('');
 
   APIClient.get(`users/${user.id}/messages/`, {
     headers: { Authorization: `Bearer ${user.token}` },
   }).then((res) => {
-    // filtrar solo los mensajes que le llegan al usuario actual
     setAllMessages(res.data);
+    const senderIds = [];
+    const sendersData = [];
+    res.data.forEach((element) => {
+      if (!senderIds.includes(element.from_id)) {
+        senderIds.push(element.from_id);
+        sendersData.push({
+          id: element.from_id,
+          to_user: element.to_user,
+          from_user_first_name: element.from_user_first_name,
+          from_user_last_name: element.from_user_last_name,
+          from_id: element.from_id,
+        });
+      }
+    });
+    setSendersMainData(sendersData);
   }, []);
 
   const handleChange = (event) => {
@@ -94,11 +109,15 @@ const Chat = () => {
       <Grid container component={Paper} className={classes.chatSection}>
         <Grid item xs={3} className={classes.borderRight500}>
           <List>
-            {allMessages &&
-              allMessages
+            {sendersMainData &&
+              sendersMainData
                 .filter((message) => message.to_user === user.id)
                 .map((item) => (
-                  <ListItem button key={item.id}>
+                  <ListItem
+                    button
+                    key={item.id}
+                    selected={item.from_id === actualUserChat}
+                  >
                     <ListItemIcon>
                       <Avatar
                         alt={item.from_user_first_name}
@@ -107,7 +126,6 @@ const Chat = () => {
                     </ListItemIcon>
                     <ListItemText
                       primary={`${item.from_user_first_name} ${item.from_user_last_name}`}
-                      secondary={item.subject}
                     />
                     <Fab
                       aria-label="see"
