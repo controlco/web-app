@@ -13,13 +13,17 @@ import Avatar from '@material-ui/core/Avatar';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
 
+import APIClient from '../../services/backend.services';
+import { useAuth } from '../../hooks/auth';
+
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
   chatSection: {
-    width: '100%',
+    width: '90%',
     height: '80vh',
+    margin: 'auto',
   },
   headBG: {
     backgroundColor: '#e0e0e0',
@@ -31,80 +35,77 @@ const useStyles = makeStyles({
     height: '70vh',
     overflowY: 'auto',
   },
+  header: {
+    margin: '15px 5px',
+    color: '#3f51b5',
+    textAlign: 'center',
+    marginBottom: '20px',
+  },
 });
 
 const Chat = () => {
   const classes = useStyles();
-  const [messageValue, setValue] = React.useState('');
+  const { user } = useAuth();
+
+  const [messageToSend, setValue] = React.useState('');
+  const [users, setUsers] = React.useState('');
+
+  React.useEffect(() => {
+    APIClient.get(`users/${user.id}/messages/received/`, {
+      headers: { Authorization: `Bearer ${user.token}` },
+    }).then((res) => {
+      setUsers(res.data);
+    });
+  }, []);
   const handleChange = (event) => {
     setValue(event.target.value);
-    console.log(event.target.value);
-  };
-  const handleClick = () => {
-    console.log(messageValue);
   };
 
+  const handleClick = () => {
+    const payload = {
+      subject: 'nada',
+      content: messageToSend,
+      to_user: 2,
+    };
+    APIClient.post(`/users/${user.id}/messages/`, payload, {
+      headers: { Authorization: `Bearer ${user.token}` },
+    })
+      .then(() => {
+        console.log('actualizado con exito');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div>
       <Grid container>
         <Grid item xs={12}>
-          <Typography variant="h5" className="header-message">
-            Chat
+          <Typography variant="h5" className={classes.header}>
+            Messages
           </Typography>
         </Grid>
       </Grid>
       <Grid container component={Paper} className={classes.chatSection}>
         <Grid item xs={3} className={classes.borderRight500}>
           <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="John Wick" />
-            </ListItem>
-          </List>
-          <Divider />
-          <Grid item xs={12} style={{ padding: '10px' }}>
-            <TextField
-              id="outlined-basic-email"
-              label="Search"
-              variant="outlined"
-              fullWidth
-            />
-          </Grid>
-          <Divider />
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="Remy Sharp">Remy Sharp</ListItemText>
-              <ListItemText secondary="online" align="right" />
-            </ListItem>
-            <ListItem button key="Alice">
-              <ListItemIcon>
-                <Avatar
-                  alt="Alice"
-                  src="https://material-ui.com/static/images/avatar/3.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="Alice">Alice</ListItemText>
-            </ListItem>
-            <ListItem button key="CindyBaker">
-              <ListItemIcon>
-                <Avatar
-                  alt="Cindy Baker"
-                  src="https://material-ui.com/static/images/avatar/2.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="Cindy Baker">Cindy Baker</ListItemText>
-            </ListItem>
+            {users &&
+              users
+                .filter((userInfo) => userInfo.to_user === user.id)
+                .map((item) => (
+                  <ListItem button key={users.from_id}>
+                    <ListItemIcon>
+                      <Avatar
+                        alt={users.from_user_first_name}
+                        src="https://material-ui.com/static/images/avatar/1.jpg"
+                      />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={`${item.from_user_first_name} ${item.from_user_last_name}`}
+                      secondary={item.subject}
+                    />
+                  </ListItem>
+                ))}
           </List>
         </Grid>
         <Grid item xs={9}>
@@ -152,7 +153,7 @@ const Chat = () => {
               <TextField
                 id="outlined-basic-email"
                 label="Type Something"
-                value={messageValue}
+                value={messageToSend}
                 onChange={handleChange}
                 fullWidth
               />
