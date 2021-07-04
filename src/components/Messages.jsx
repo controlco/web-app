@@ -85,7 +85,7 @@ const Chat = () => {
 
   const handleSendMessage = () => {
     const payload = {
-      subject: 'probando',
+      subject: 'Important Question',
       content: messageToSend,
       to_user: actualUserChat,
     };
