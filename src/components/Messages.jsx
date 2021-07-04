@@ -7,15 +7,12 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
 
 import APIClient from '../../services/backend.services';
 import { useAuth } from '../../hooks/auth';
-import { SentimentSatisfiedOutlined } from '@material-ui/icons';
 
 const useStyles = makeStyles({
   table: {
@@ -41,6 +38,10 @@ const useStyles = makeStyles({
     color: '#3f51b5',
     textAlign: 'center',
     marginBottom: '20px',
+  },
+  list: {
+    overflow: 'scroll',
+    height: '80vh',
   },
 });
 
@@ -108,7 +109,7 @@ const Chat = () => {
       </Grid>
       <Grid container component={Paper} className={classes.chatSection}>
         <Grid item xs={3} className={classes.borderRight500}>
-          <List>
+          <List className={classes.list}>
             {sendersMainData &&
               sendersMainData
                 .filter((message) => message.to_user === user.id)
@@ -117,19 +118,10 @@ const Chat = () => {
                     button
                     key={item.id}
                     selected={item.from_id === actualUserChat}
+                    onClick={() => handleClick(item.from_id)}
                   >
-                    <ListItemIcon>
-                      <Avatar
-                        alt={item.from_user_first_name}
-                        src="https://material-ui.com/static/images/avatar/1.jpg"
-                      />
-                    </ListItemIcon>
                     <ListItemText
                       primary={`${item.from_user_first_name} ${item.from_user_last_name}`}
-                    />
-                    <Fab
-                      aria-label="see"
-                      onClick={() => handleClick(item.from_id)}
                     />
                   </ListItem>
                 ))}

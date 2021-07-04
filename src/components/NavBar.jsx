@@ -330,7 +330,7 @@ const NavBar = () => {
               aria-label="show 4 new mails"
               color="inherit"
             >
-              <Badge badgeContent={4} color="secondary">
+              <Badge color="secondary">
                 <MailIcon />
               </Badge>
             </IconButton>
