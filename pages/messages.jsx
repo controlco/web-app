@@ -1,14 +1,11 @@
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/router';
-import Loading from '../src/components/Loading';
+import React from 'react';
+import Messages from '../src/components/Messages';
+import Layout from '../src/components/Layout';
 
-const messages = () => {
-  const router = useRouter();
-  useEffect(() => {
-    router.push('/404');
-  });
-  return <Loading />;
-  // return <div>agregar mensajes de entrada</div>;
-};
+const messages = () => (
+  <Layout>
+    <Messages />
+  </Layout>
+);
 
 export default messages;

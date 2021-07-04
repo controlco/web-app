@@ -11,7 +11,6 @@ import APIClient from '../../../services/backend.services';
 const Properties = () => {
   const classes = useStyles();
   const { user } = useAuth();
-  console.log(`user ${JSON.stringify(user)}`);
 
   const [data, setData] = React.useState(null);
 
