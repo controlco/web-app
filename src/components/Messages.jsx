@@ -47,36 +47,41 @@ const Chat = () => {
   const classes = useStyles();
   const { user } = useAuth();
 
+  // mensaje escrito en el input
   const [messageToSend, setValue] = React.useState('');
-  const [users, setUsers] = React.useState('');
+  // todos los mensajes que le han llegado al usuario actual
+  const [allMessages, setAllMessages] = React.useState('');
+  // id del usuario especifico que estamos viendo
+  const [actualUserChat, setActualUserChat] = React.useState(24);
+  // // subject actual
+  // const [actualSubject, setActualSubject] = React.useState(24);
 
-  React.useEffect(() => {
-    APIClient.get(`users/${user.id}/messages/received/`, {
-      headers: { Authorization: `Bearer ${user.token}` },
-    }).then((res) => {
-      setUsers(res.data);
-    });
+  APIClient.get(`users/${user.id}/messages/`, {
+    headers: { Authorization: `Bearer ${user.token}` },
+  }).then((res) => {
+    // filtrar solo los mensajes que le llegan al usuario actual
+    setAllMessages(res.data);
   }, []);
+
   const handleChange = (event) => {
     setValue(event.target.value);
   };
 
-  const handleClick = () => {
+  const handleSendMessage = () => {
     const payload = {
-      subject: 'nada',
+      subject: 'probando',
       content: messageToSend,
-      to_user: 2,
+      to_user: actualUserChat,
     };
     APIClient.post(`/users/${user.id}/messages/`, payload, {
       headers: { Authorization: `Bearer ${user.token}` },
-    })
-      .then(() => {
-        console.log('actualizado con exito');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    });
   };
+
+  const handleClick = (userId) => {
+    setActualUserChat(userId);
+  };
+
   return (
     <div>
       <Grid container>
@@ -89,14 +94,14 @@ const Chat = () => {
       <Grid container component={Paper} className={classes.chatSection}>
         <Grid item xs={3} className={classes.borderRight500}>
           <List>
-            {users &&
-              users
-                .filter((userInfo) => userInfo.to_user === user.id)
+            {allMessages &&
+              allMessages
+                .filter((message) => message.to_user === user.id)
                 .map((item) => (
-                  <ListItem button key={users.from_id}>
+                  <ListItem button key={item.id}>
                     <ListItemIcon>
                       <Avatar
-                        alt={users.from_user_first_name}
+                        alt={item.from_user_first_name}
                         src="https://material-ui.com/static/images/avatar/1.jpg"
                       />
                     </ListItemIcon>
@@ -104,48 +109,39 @@ const Chat = () => {
                       primary={`${item.from_user_first_name} ${item.from_user_last_name}`}
                       secondary={item.subject}
                     />
+                    <Fab
+                      aria-label="see"
+                      onClick={() => handleClick(item.from_id)}
+                    />
                   </ListItem>
                 ))}
           </List>
         </Grid>
         <Grid item xs={9}>
           <List className={classes.messageArea}>
-            <ListItem key="1">
-              <Grid container>
-                <Grid item xs={12}>
-                  <ListItemText align="right" primary="Hey man, What's up ?" />
-                </Grid>
-                <Grid item xs={12}>
-                  <ListItemText align="right" secondary="09:30" />
-                </Grid>
-              </Grid>
-            </ListItem>
-            <ListItem key="2">
-              <Grid container>
-                <Grid item xs={12}>
-                  <ListItemText
-                    align="left"
-                    primary="Hey, Iam Good! What about you ?"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <ListItemText align="left" secondary="09:31" />
-                </Grid>
-              </Grid>
-            </ListItem>
-            <ListItem key="3">
-              <Grid container>
-                <Grid item xs={12}>
-                  <ListItemText
-                    align="right"
-                    primary="Cool. i am good, let's catch up!"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <ListItemText align="right" secondary="10:30" />
-                </Grid>
-              </Grid>
-            </ListItem>
+            {allMessages &&
+              allMessages
+                .filter(
+                  (message) =>
+                    (message.from_id === actualUserChat &&
+                      message.to_user === user.id) ||
+                    (message.to_user === actualUserChat &&
+                      message.from_id === user.id)
+                )
+                .map((item) => (
+                  <ListItem key={item.id}>
+                    <Grid container>
+                      <Grid item xs={12}>
+                        <ListItemText
+                          align={
+                            item.from_id === actualUserChat ? 'left' : 'right'
+                          }
+                          primary={item.content}
+                        />
+                      </Grid>
+                    </Grid>
+                  </ListItem>
+                ))}
           </List>
           <Divider />
           <Grid container style={{ padding: '20px' }}>
@@ -159,7 +155,12 @@ const Chat = () => {
               />
             </Grid>
             <Grid xs={1} align="right">
-              <Fab color="primary" aria-label="add" onClick={handleClick}>
+              <Fab
+                color="primary"
+                aria-label="add"
+                onClick={handleSendMessage}
+                href="/messages"
+              >
                 <SendIcon />
               </Fab>
             </Grid>
