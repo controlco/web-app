@@ -35,6 +35,14 @@ const useStyles = makeStyles({
 
 const Chat = () => {
   const classes = useStyles();
+  const [messageValue, setValue] = React.useState('');
+  const handleChange = (event) => {
+    setValue(event.target.value);
+    console.log(event.target.value);
+  };
+  const handleClick = () => {
+    console.log(messageValue);
+  };
 
   return (
     <div>
@@ -144,11 +152,13 @@ const Chat = () => {
               <TextField
                 id="outlined-basic-email"
                 label="Type Something"
+                value={messageValue}
+                onChange={handleChange}
                 fullWidth
               />
             </Grid>
             <Grid xs={1} align="right">
-              <Fab color="primary" aria-label="add">
+              <Fab color="primary" aria-label="add" onClick={handleClick}>
                 <SendIcon />
               </Fab>
             </Grid>
