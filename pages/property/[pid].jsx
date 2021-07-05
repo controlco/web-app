@@ -7,12 +7,12 @@ import Layout from '../../src/components/Layout';
 import APIClient from '../../services/backend.services';
 import { useAuth } from '../../hooks/auth';
 // eslint-disable-next-line react/prop-types
-export default function Prop({ data }) {
+export default function Prop({ data, meetings }) {
   const { user } = useAuth();
   const router = useRouter();
   const { pid } = router.query;
   // console.log(`pid- ${pid} \nuserToken -${user.token}`);
-  console.log(`data - ${JSON.stringify(data, null, 2)}`); // ;
+  if (meetings) console.log(`data - ${JSON.stringify(meetings, null, 2)}`); // ;
   const {
     title,
     adress,
@@ -47,6 +47,7 @@ export default function Prop({ data }) {
             : // ? JSON.stringify(item.property_images[0].cover)
               'https://ecowellness.com/wp-content/uploads/2017/04/property.jpg'
         }
+        meetings={meetings}
       />
     </Layout>
   );
@@ -54,6 +55,8 @@ export default function Prop({ data }) {
 
 export async function getServerSideProps(context) {
   const { data } = await APIClient.get(`/properties/${context.params.pid}`);
-  console.log('data server');
-  return { props: { data } };
+  const meetings = await APIClient.get(
+    `/properties/${context.params.pid}/meetings/`
+  );
+  return { props: { data, meetings: meetings.data } };
 }
