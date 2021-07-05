@@ -18,6 +18,10 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CircularProgressWithLabel from '../../CircularProgressWithLabel';
 
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+
 import { useRouter } from 'next/router';
 import useStyles from './PropertyItem.styles';
 import { useAuth } from '../../../../hooks/auth';
@@ -39,6 +43,7 @@ const PropertyItem = (props) => {
     waterService,
     imageUrl,
     pid,
+    meetings,
   } = props;
   // const router = useRouter();
 
@@ -429,6 +434,36 @@ const PropertyItem = (props) => {
             </Grid>
           </Grid>
         </form>
+      </Paper>
+
+      <Paper className={classes.paper}>
+        <Typography
+          align="center"
+          component="h1"
+          variant="h5"
+          className={classes.title}
+        >
+          Visitas agendadas
+        </Typography>
+        <Grid container spacing={3}>
+          {meetings.map((meet) => (
+            <Grid item key={meet.id} xs={12} sm={4}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h5" component="h2">
+                    {meet.date}
+                  </Typography>
+                  <Typography variant="h6" component="h2">
+                    {meet.hour}:00
+                  </Typography>
+                  <Typography variant="body2" component="p">
+                    Visita agendada por usuario {meet.visitor_id}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
       </Paper>
     </Container>
   );
