@@ -190,26 +190,16 @@ const NavBar = () => {
       >
         <List className={classes.root}>
           {/* eslint-disable-next-line no-unused-vars */}
-          {Array.from(new Array(20), (x, i) => (
+          {Array.from(new Array(2), (x, i) => (
             <>
               <ListItem alignItems="flex-start">
                 <ListItemAvatar>
                   <Avatar alt="Remy Sharp" />
                 </ListItemAvatar>
                 <ListItemText
-                  primary="Brunch this weekend?"
+                  primary="Nueva reserva!"
                   secondary={
-                    <>
-                      <Typography
-                        component="span"
-                        variant="body2"
-                        className={classes.inline}
-                        color="textPrimary"
-                      >
-                        Ali Connors
-                      </Typography>
-                      {" — I'll be in your neighborhood doing errands this…"}
-                    </>
+                    <>Tu propiedad ha recibido un agendamiento de visita.</>
                   }
                 />
               </ListItem>
@@ -336,10 +326,10 @@ const NavBar = () => {
             </IconButton>
             <IconButton
               onClick={(event) => handleClick(event)}
-              aria-label="show 17 new notifications"
+              aria-label="show 5 new notifications"
               color="inherit"
             >
-              <Badge badgeContent={17} color="secondary">
+              <Badge badgeContent={2} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
