@@ -9,6 +9,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Fab from '@material-ui/core/Fab';
+import { useRouter } from 'next/router';
 import SendIcon from '@material-ui/icons/Send';
 
 import APIClient from '../../services/backend.services';
@@ -48,6 +49,7 @@ const useStyles = makeStyles({
 const Chat = () => {
   const classes = useStyles();
   const { user } = useAuth();
+  const router = useRouter();
 
   // mensaje escrito en el input
   const [messageToSend, setValue] = React.useState('');
@@ -83,14 +85,17 @@ const Chat = () => {
     setValue(event.target.value);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     const payload = {
       subject: 'Important Question',
       content: messageToSend,
       to_user: actualUserChat,
     };
-    APIClient.post(`/users/${user.id}/messages/`, payload, {
+    await APIClient.post(`/users/${user.id}/messages/`, payload, {
       headers: { Authorization: `Bearer ${user.token}` },
+    }).then(() => {
+      router.push('/messages');
+      setValue('');
     });
   };
 
@@ -165,12 +170,7 @@ const Chat = () => {
               />
             </Grid>
             <Grid xs={1} align="right">
-              <Fab
-                color="primary"
-                aria-label="add"
-                onClick={handleSendMessage}
-                href="/messages"
-              >
+              <Fab color="primary" aria-label="add" onClick={handleSendMessage}>
                 <SendIcon />
               </Fab>
             </Grid>
